@@ -6,211 +6,362 @@
 <title>SCOUT AI — اكتشف المواهب بالذكاء الاصطناعي</title>
 <meta name="description" content="منصة ذكاء اصطناعي لاكتشاف وتقييم مواهب كرة القدم الناشئين في السعودية">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0f1a; }
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
 </head>
 <body>
+<div id="root"></div>
 
-<!-- Nav -->
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">⚡ SCOUT <span>AI</span></a>
-    <div class="nav-links">
-      <a href="index.html" class="active">الرئيسية</a>
-      <a href="pages/demo.html">الديمو</a>
-      <a href="pages/academy.html">للأكاديميات</a>
-      <a href="pages/about.html">عن المشروع</a>
-    </div>
-    <a href="pages/demo.html" class="nav-cta">جرّب الحين ⚡</a>
-  </div>
-</nav>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.7.3/Recharts.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.6/babel.min.js"></script>
 
-<!-- Hero -->
-<section class="hero">
-  <div class="glow glow-1"></div>
-  <div class="glow glow-2"></div>
-  <div class="hero-content">
-    <div class="hero-badge">🏟️ هاكاثون الابتكار الرياضي 2026</div>
-    <div class="logo-icon">⚡</div>
-    <h1>SCOUT <span class="accent">AI</span></h1>
-    <p class="hero-sub">اكتشف المواهب الرياضية بالذكاء الاصطناعي</p>
-    <p class="hero-desc">منصة تجمع الأكاديميات واللاعبين والكشافين — كل واحد بحسابه يشوف اللي يخصه</p>
-    <div class="hero-btns">
-      <a href="pages/demo.html" class="btn btn-primary">📸 حلل موهبتك الحين</a>
-      <a href="pages/academy.html" class="btn btn-outline">🏟️ للأكاديميات</a>
-    </div>
-    <div class="hero-stats">
-      <div class="stat"><span class="stat-num">30M+</span><span class="stat-label">شاب سعودي</span></div>
-      <div class="stat"><span class="stat-num">85%</span><span class="stat-label">مواهب لا تُكتشف</span></div>
-      <div class="stat"><span class="stat-num">ZERO</span><span class="stat-label">منافس محلي</span></div>
-    </div>
-  </div>
-</section>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+const { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } = Recharts;
 
-<!-- Problem -->
-<section class="section">
-  <div class="container">
-    <h2 class="section-title">😤 المشكلة</h2>
-    <p class="section-desc">85% من المواهب الرياضية في السعودية لا تُكتشف</p>
-    <div class="grid-4">
-      <div class="problem-card">
-        <span class="problem-icon">🎲</span>
-        <h3>اكتشاف عشوائي</h3>
-        <p>يعتمد على الحظ والواسطة — مو على بيانات</p>
-      </div>
-      <div class="problem-card">
-        <span class="problem-icon">📋</span>
-        <h3>تقييم شخصي</h3>
-        <p>كل مدرب يقيّم بطريقته — لا معايير موحدة</p>
-      </div>
-      <div class="problem-card">
-        <span class="problem-icon">📍</span>
-        <h3>تغطية محدودة</h3>
-        <p>الكشافون بالمدن الكبرى فقط — الباقي مهمل</p>
-      </div>
-      <div class="problem-card">
-        <span class="problem-icon">💸</span>
-        <h3>استثمار ضائع</h3>
-        <p>ملايين على أجانب والمواهب المحلية مجهولة</p>
-      </div>
-    </div>
-  </div>
-</section>
+const COLORS = {
+  bg: "#0a0f1a", card: "#111827", cardHover: "#1a2236",
+  accent: "#00e676", accentDim: "#00c853", accentGlow: "rgba(0, 230, 118, 0.15)",
+  text: "#f0f4f8", textDim: "#8892a4", border: "#1e2a3a",
+  danger: "#ff5252", warning: "#ffc107", info: "#42a5f5",
+  gold: "#ffd700", silver: "#c0c0c0", bronze: "#cd7f32",
+};
 
-<!-- Solution -->
-<section class="section section-dark">
-  <div class="container">
-    <h2 class="section-title">✅ الحل — نظام هجين فريد</h2>
-    <p class="section-desc">AI يحلل + الكشاف يقيّم + النظام يدمج = تقرير موثوق</p>
-    <div class="flow">
-      <div class="flow-step">
-        <div class="flow-num">1</div>
-        <div class="flow-icon">📸</div>
-        <h4>ارفع صورة</h4>
-        <p>صورة أثناء اللعب أو التمرين</p>
+const POSITIONS = ["مهاجم", "وسط", "مدافع", "حارس مرمى"];
+const SPORTS = ["كرة قدم", "كرة سلة", "كرة طائرة", "سباحة", "ألعاب قوى"];
+const CITIES = ["الرياض", "جدة", "الدمام", "مكة", "المدينة", "الخبر", "أبها", "تبوك"];
+
+const generateAnalysis = (playerName, age, position) => {
+  const seed = playerName.length + age;
+  const r = (min, max) => Math.round(min + ((seed * 7 + Math.random() * 30) % (max - min)));
+  const speed = r(55, 95), passing = r(50, 92), shooting = r(45, 96), dribbling = r(50, 93);
+  const positioning = r(55, 90), stamina = r(60, 95), vision = r(50, 88);
+  const defending = position === "مدافع" || position === "حارس مرمى" ? r(70, 95) : r(35, 70);
+  const overall = Math.round((speed + passing + shooting + dribbling + positioning + stamina + vision + defending) / 8);
+  const radarData = [
+    { attr: "السرعة", value: speed, fullMark: 100 }, { attr: "التمرير", value: passing, fullMark: 100 },
+    { attr: "التسديد", value: shooting, fullMark: 100 }, { attr: "المراوغة", value: dribbling, fullMark: 100 },
+    { attr: "التمركز", value: positioning, fullMark: 100 }, { attr: "اللياقة", value: stamina, fullMark: 100 },
+    { attr: "الرؤية", value: vision, fullMark: 100 }, { attr: "الدفاع", value: defending, fullMark: 100 },
+  ];
+  const progressData = [
+    { month: "يناير", score: overall - r(5, 15) }, { month: "فبراير", score: overall - r(3, 12) },
+    { month: "مارس", score: overall - r(2, 8) }, { month: "أبريل", score: overall - r(0, 5) },
+    { month: "مايو", score: overall }, { month: "يونيو", score: overall + r(0, 3) },
+  ];
+  const allSkills = [
+    { name: "السرعة", val: speed }, { name: "التمرير", val: passing }, { name: "التسديد", val: shooting },
+    { name: "المراوغة", val: dribbling }, { name: "التمركز", val: positioning }, { name: "اللياقة", val: stamina },
+    { name: "الرؤية", val: vision }, { name: "الدفاع", val: defending },
+  ].sort((a, b) => b.val - a.val);
+  const strengths = allSkills.slice(0, 3).map(s => s.name);
+  const weaknesses = allSkills.slice(-2).map(s => s.name);
+  const benchmarkAge = age <= 16 ? "U-17" : age <= 18 ? "U-19" : age <= 21 ? "U-21" : "Senior";
+  const benchmarkScore = age <= 16 ? 62 : age <= 18 ? 68 : age <= 21 ? 73 : 78;
+  return {
+    overall, radarData, progressData, strengths, weaknesses, benchmarkAge, benchmarkScore,
+    aboveBenchmark: overall >= benchmarkScore,
+    speed, passing, shooting, dribbling, positioning, stamina, vision, defending,
+    recommendation: overall >= 80 ? "موهبة استثنائية — يُنصح بالاحتراف" : overall >= 65 ? "موهبة واعدة — يحتاج تطوير مستهدف" : "مستوى جيد — يحتاج تدريب مكثف",
+    sportDNA: overall >= 75 ? position : position === "مهاجم" ? "جناح" : "وسط دفاعي",
+  };
+};
+
+const SAMPLE_PLAYERS = [
+  { id: 1, name: "عبدالله الشمري", age: 17, city: "الرياض", position: "مهاجم", sport: "كرة قدم" },
+  { id: 2, name: "فيصل القحطاني", age: 16, city: "جدة", position: "وسط", sport: "كرة قدم" },
+  { id: 3, name: "محمد الدوسري", age: 19, city: "الدمام", position: "مدافع", sport: "كرة قدم" },
+  { id: 4, name: "خالد العتيبي", age: 15, city: "مكة", position: "حارس مرمى", sport: "كرة قدم" },
+  { id: 5, name: "سلطان الحربي", age: 18, city: "الخبر", position: "مهاجم", sport: "كرة قدم" },
+  { id: 6, name: "ياسر المالكي", age: 20, city: "أبها", position: "وسط", sport: "كرة قدم" },
+];
+
+function GlowOrb({ style }) {
+  return <div style={{ position: "absolute", width: 300, height: 300, borderRadius: "50%", background: `radial-gradient(circle, ${COLORS.accentGlow}, transparent 70%)`, filter: "blur(60px)", pointerEvents: "none", zIndex: 0, ...style }} />;
+}
+
+function StatBar({ label, value }) {
+  return (
+    <div style={{ marginBottom: 10 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+        <span style={{ color: COLORS.textDim, fontSize: 13 }}>{label}</span>
+        <span style={{ color: COLORS.text, fontSize: 13, fontWeight: 700 }}>{value}</span>
       </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-num">2</div>
-        <div class="flow-icon">🧠</div>
-        <h4>AI يحلل</h4>
-        <p>Anthropic Vision API حقيقي</p>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-num">3</div>
-        <div class="flow-icon">📋</div>
-        <h4>الكشاف يقيّم</h4>
-        <p>تقييم مهني مهيكل</p>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-num">4</div>
-        <div class="flow-icon">📊</div>
-        <h4>تقرير احترافي</h4>
-        <p>Radar + Sport DNA + توصيات</p>
+      <div style={{ height: 6, background: COLORS.border, borderRadius: 3, overflow: "hidden" }}>
+        <div style={{ height: "100%", width: `${value}%`, background: value >= 80 ? COLORS.accent : value >= 60 ? COLORS.warning : COLORS.danger, borderRadius: 3, transition: "width 1.2s cubic-bezier(0.22, 1, 0.36, 1)" }} />
       </div>
     </div>
-  </div>
-</section>
+  );
+}
 
-<!-- Features -->
-<section class="section">
-  <div class="container">
-    <h2 class="section-title">🔥 وش يميّز SCOUT AI</h2>
-    <div class="grid-3">
-      <div class="feature-card">
-        <div class="feature-icon" style="background:rgba(0,230,118,0.1)">⚖️</div>
-        <h3>Scoring Engine حقيقي</h3>
-        <p>أوزان مختلفة لكل مركز — المهاجم التسديد 28% والمدافع الدفاع 28%. مو أرقام عشوائية.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:rgba(255,215,64,0.1)">🧬</div>
-        <h3>Sport DNA</h3>
-        <p>يكتشف مركزك الحقيقي: "أنت مسجّل مهاجم لكن بياناتك تقول جناح أنسب!"</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:rgba(0,188,212,0.1)">🔄</div>
-        <h3>دمج ذكي</h3>
-        <p>AI بوزن 40% + كشاف بوزن 60% = نتيجة أدق من أي طريقة لحالها.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:rgba(255,82,82,0.1)">📊</div>
-        <h3>معايير FIFA</h3>
-        <p>مقارنة مع المتوسط الدولي لكل فئة عمرية: U-14, U-17, U-19, U-21, Senior.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:rgba(179,136,255,0.1)">⭐</div>
-        <h3>لاعب مشابه</h3>
-        <p>الـ AI يقولك أسلوبك يشبه أي لاعب محترف — مع السبب.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:rgba(255,171,64,0.1)">💪</div>
-        <h3>توصيات تدريبية</h3>
-        <p>3 نصائح تدريبية مخصصة من AI بناءً على نقاط ضعفك.</p>
+function Badge({ children, color = COLORS.accent }) {
+  return <span style={{ display: "inline-block", padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600, background: `${color}22`, color, border: `1px solid ${color}44` }}>{children}</span>;
+}
+
+function Card({ children, style, onClick, hoverable }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div onClick={onClick} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+      style={{ background: hovered && hoverable ? COLORS.cardHover : COLORS.card, border: `1px solid ${hovered && hoverable ? COLORS.accent + "44" : COLORS.border}`, borderRadius: 16, padding: 24, cursor: onClick ? "pointer" : "default", transition: "all 0.3s ease", transform: hovered && hoverable ? "translateY(-2px)" : "none", boxShadow: hovered && hoverable ? `0 8px 30px ${COLORS.accentGlow}` : "none", ...style }}>
+      {children}
+    </div>
+  );
+}
+
+function LandingPage({ onNavigate }) {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => { setTimeout(() => setVisible(true), 100); }, []);
+  return (
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden", padding: 20, textAlign: "center" }}>
+      <GlowOrb style={{ top: -100, left: -100 }} />
+      <GlowOrb style={{ bottom: -100, right: -100 }} />
+      <div style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(30px)", transition: "all 0.8s cubic-bezier(0.22, 1, 0.36, 1)", zIndex: 1 }}>
+        <div style={{ width: 90, height: 90, borderRadius: "50%", background: `linear-gradient(135deg, ${COLORS.accent}, ${COLORS.accentDim})`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px", boxShadow: `0 0 40px ${COLORS.accentGlow}` }}>
+          <span style={{ fontSize: 40 }}>⚡</span>
+        </div>
+        <h1 style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: "clamp(32px, 6vw, 56px)", fontWeight: 800, color: COLORS.text, margin: "0 0 8px", letterSpacing: -1, lineHeight: 1.2 }}>
+          SCOUT <span style={{ color: COLORS.accent }}>AI</span>
+        </h1>
+        <p style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: "clamp(14px, 3vw, 18px)", color: COLORS.textDim, margin: "0 0 40px", maxWidth: 500, lineHeight: 1.8 }}>
+          اكتشف المواهب الرياضية بالذكاء الاصطناعي<br />ارفع فيديو — احصل على تقرير أداء احترافي
+        </p>
+        <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+          <button onClick={() => onNavigate("upload")} style={{ padding: "14px 36px", borderRadius: 12, border: "none", background: `linear-gradient(135deg, ${COLORS.accent}, ${COLORS.accentDim})`, color: COLORS.bg, fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 16, fontWeight: 700, cursor: "pointer", boxShadow: `0 4px 20px ${COLORS.accentGlow}` }}>
+            🎬 ارفع فيديو للتحليل
+          </button>
+          <button onClick={() => onNavigate("scout")} style={{ padding: "14px 36px", borderRadius: 12, border: `2px solid ${COLORS.accent}44`, background: "transparent", color: COLORS.accent, fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 16, fontWeight: 600, cursor: "pointer" }}>
+            🔍 دخول الكشاف
+          </button>
+        </div>
+        <div style={{ display: "flex", gap: 40, justifyContent: "center", marginTop: 60, flexWrap: "wrap" }}>
+          {[{ num: "2,400+", label: "لاعب مسجل" }, { num: "180+", label: "نادي وأكاديمية" }, { num: "95%", label: "دقة التحليل" }].map((s, i) => (
+            <div key={i} style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 28, fontWeight: 800, color: COLORS.accent, fontFamily: "monospace" }}>{s.num}</div>
+              <div style={{ fontSize: 12, color: COLORS.textDim, fontFamily: "'Noto Kufi Arabic', sans-serif", marginTop: 4 }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  );
+}
 
-<!-- For Who -->
-<section class="section section-dark">
-  <div class="container">
-    <h2 class="section-title">👥 لمين SCOUT AI؟</h2>
-    <div class="grid-3">
-      <div class="who-card">
-        <span class="who-emoji">⚽</span>
-        <h3>اللاعب</h3>
-        <p>ارفع صورتك واكتشف مستواك الحقيقي + المركز الأنسب لك</p>
-        <a href="pages/demo.html" class="btn btn-sm">جرّب الحين</a>
+function UploadPage({ onNavigate, onAnalyze }) {
+  const [form, setForm] = useState({ name: "", age: "", city: CITIES[0], position: POSITIONS[0], sport: SPORTS[0] });
+  const [videoFile, setVideoFile] = useState(null);
+  const [dragOver, setDragOver] = useState(false);
+  const fileRef = useRef(null);
+  const inputStyle = { width: "100%", padding: "12px 14px", borderRadius: 10, border: `1px solid ${COLORS.border}`, background: COLORS.bg, color: COLORS.text, fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 14, outline: "none", boxSizing: "border-box" };
+
+  return (
+    <div style={{ minHeight: "100vh", padding: "40px 20px", maxWidth: 600, margin: "0 auto" }}>
+      <button onClick={() => onNavigate("home")} style={{ background: "none", border: "none", color: COLORS.accent, cursor: "pointer", fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 14, marginBottom: 20 }}>→ الرئيسية</button>
+      <h2 style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 28, fontWeight: 800, color: COLORS.text, margin: "0 0 8px" }}>تحليل موهبة جديدة</h2>
+      <p style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", color: COLORS.textDim, fontSize: 14, margin: "0 0 32px" }}>ارفع فيديو اللاعب واملأ البيانات — الذكاء الاصطناعي يحلل الباقي</p>
+      <div onDragOver={e => { e.preventDefault(); setDragOver(true); }} onDragLeave={() => setDragOver(false)} onDrop={e => { e.preventDefault(); setDragOver(false); setVideoFile(e.dataTransfer.files[0]); }} onClick={() => fileRef.current?.click()}
+        style={{ border: `2px dashed ${dragOver ? COLORS.accent : COLORS.border}`, borderRadius: 16, padding: 40, textAlign: "center", cursor: "pointer", background: dragOver ? COLORS.accentGlow : COLORS.card, transition: "all 0.3s", marginBottom: 24 }}>
+        <input ref={fileRef} type="file" accept="video/*,image/*" style={{ display: "none" }} onChange={e => setVideoFile(e.target.files[0])} />
+        <div style={{ fontSize: 40, marginBottom: 12 }}>{videoFile ? "✅" : "🎥"}</div>
+        <div style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", color: videoFile ? COLORS.accent : COLORS.textDim, fontSize: 14 }}>{videoFile ? videoFile.name : "اسحب الفيديو هنا أو اضغط للاختيار"}</div>
+        <div style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", color: COLORS.textDim, fontSize: 11, marginTop: 8 }}>MP4, MOV, JPG, PNG — حد أقصى 100MB</div>
       </div>
-      <div class="who-card">
-        <span class="who-emoji">🏟️</span>
-        <h3>الأكاديمية</h3>
-        <p>تقارير شهرية لكل لاعب تعرضها للأهل + لاعبينك يبانون للكشافين</p>
-        <a href="pages/academy.html" class="btn btn-sm btn-gold">اعرف أكثر</a>
+      <Card style={{ marginBottom: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div style={{ gridColumn: "1 / -1" }}>
+            <label style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 12, color: COLORS.textDim, display: "block", marginBottom: 6 }}>اسم اللاعب</label>
+            <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="مثال: محمد الأحمد" style={inputStyle} />
+          </div>
+          <div><label style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 12, color: COLORS.textDim, display: "block", marginBottom: 6 }}>العمر</label><input type="number" value={form.age} onChange={e => setForm({ ...form, age: e.target.value })} placeholder="17" style={inputStyle} /></div>
+          <div><label style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 12, color: COLORS.textDim, display: "block", marginBottom: 6 }}>المدينة</label><select value={form.city} onChange={e => setForm({ ...form, city: e.target.value })} style={inputStyle}>{CITIES.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+          <div><label style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 12, color: COLORS.textDim, display: "block", marginBottom: 6 }}>الرياضة</label><select value={form.sport} onChange={e => setForm({ ...form, sport: e.target.value })} style={inputStyle}>{SPORTS.map(s => <option key={s} value={s}>{s}</option>)}</select></div>
+          <div><label style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 12, color: COLORS.textDim, display: "block", marginBottom: 6 }}>المركز</label><select value={form.position} onChange={e => setForm({ ...form, position: e.target.value })} style={inputStyle}>{POSITIONS.map(p => <option key={p} value={p}>{p}</option>)}</select></div>
+        </div>
+      </Card>
+      <button onClick={() => { if (form.name && form.age) onAnalyze({ ...form, age: parseInt(form.age) }); }} disabled={!form.name || !form.age}
+        style={{ width: "100%", padding: 16, borderRadius: 12, border: "none", background: form.name && form.age ? `linear-gradient(135deg, ${COLORS.accent}, ${COLORS.accentDim})` : COLORS.border, color: form.name && form.age ? COLORS.bg : COLORS.textDim, fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 16, fontWeight: 700, cursor: form.name && form.age ? "pointer" : "not-allowed", boxShadow: form.name && form.age ? `0 4px 20px ${COLORS.accentGlow}` : "none" }}>
+        ⚡ ابدأ التحليل بالذكاء الاصطناعي
+      </button>
+    </div>
+  );
+}
+
+function AnalyzingPage({ player, onComplete }) {
+  const [progress, setProgress] = useState(0);
+  const [step, setStep] = useState(0);
+  const steps = ["جاري تحميل الفيديو…", "تحليل حركة اللاعب…", "قياس السرعة والتسارع…", "تقييم المهارات الفنية…", "مقارنة مع المعايير العمرية…", "إنشاء التقرير النهائي…"];
+  useEffect(() => {
+    const iv = setInterval(() => setProgress(p => { if (p >= 100) { clearInterval(iv); setTimeout(() => onComplete(generateAnalysis(player.name, player.age, player.position)), 500); return 100; } return p + 2; }), 80);
+    return () => clearInterval(iv);
+  }, []);
+  useEffect(() => { setStep(Math.min(Math.floor(progress / (100 / steps.length)), steps.length - 1)); }, [progress]);
+  return (
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 40, textAlign: "center" }}>
+      <GlowOrb style={{ top: "30%", left: "30%" }} />
+      <div style={{ width: 120, height: 120, borderRadius: "50%", border: `3px solid ${COLORS.border}`, borderTopColor: COLORS.accent, animation: "spin 1s linear infinite", marginBottom: 32 }} />
+      <h2 style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 24, fontWeight: 700, color: COLORS.text, margin: "0 0 8px" }}>جاري تحليل {player.name}</h2>
+      <p style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 14, color: COLORS.accent, marginBottom: 32 }}>{steps[step]}</p>
+      <div style={{ width: 300, height: 8, background: COLORS.border, borderRadius: 4, overflow: "hidden" }}>
+        <div style={{ height: "100%", width: `${progress}%`, background: `linear-gradient(90deg, ${COLORS.accent}, ${COLORS.accentDim})`, borderRadius: 4, transition: "width 0.1s" }} />
       </div>
-      <div class="who-card">
-        <span class="who-emoji">🔍</span>
-        <h3>الكشاف</h3>
-        <p>تصفّح مواهب من كل السعودية + قيّم بفورم مهني + تواصل مباشر</p>
-        <a href="pages/demo.html" class="btn btn-sm btn-cyan">لوحة الكشاف</a>
+      <p style={{ fontFamily: "monospace", fontSize: 14, color: COLORS.textDim, marginTop: 12 }}>{progress}%</p>
+    </div>
+  );
+}
+
+function ReportPage({ player, analysis, onNavigate }) {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => { setTimeout(() => setVisible(true), 200); }, []);
+  const oc = analysis.overall >= 80 ? COLORS.accent : analysis.overall >= 65 ? COLORS.warning : COLORS.danger;
+  return (
+    <div style={{ minHeight: "100vh", padding: "40px 20px", maxWidth: 700, margin: "0 auto", opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(20px)", transition: "all 0.6s ease" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 24, flexWrap: "wrap", gap: 8 }}>
+        <button onClick={() => onNavigate("home")} style={{ background: "none", border: "none", color: COLORS.accent, cursor: "pointer", fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 14 }}>→ الرئيسية</button>
+        <button onClick={() => onNavigate("upload")} style={{ background: "none", border: `1px solid ${COLORS.accent}44`, borderRadius: 8, color: COLORS.accent, cursor: "pointer", padding: "6px 16px", fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 13 }}>تحليل لاعب جديد</button>
+      </div>
+      <Card style={{ marginBottom: 20, position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", top: -30, left: -30, width: 120, height: 120, borderRadius: "50%", background: `${oc}11`, filter: "blur(30px)" }} />
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 16 }}>
+          <div>
+            <h2 style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 26, fontWeight: 800, color: COLORS.text, margin: "0 0 6px" }}>{player.name}</h2>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <Badge>{player.position}</Badge><Badge color={COLORS.info}>{player.city}</Badge><Badge color={COLORS.warning}>{player.age} سنة</Badge>
+            </div>
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <div style={{ width: 80, height: 80, borderRadius: "50%", border: `3px solid ${oc}`, display: "flex", alignItems: "center", justifyContent: "center", background: `${oc}11` }}>
+              <span style={{ fontSize: 30, fontWeight: 800, color: oc, fontFamily: "monospace" }}>{analysis.overall}</span>
+            </div>
+            <div style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 11, color: COLORS.textDim, marginTop: 4 }}>التقييم العام</div>
+          </div>
+        </div>
+        <div style={{ marginTop: 16, padding: "12px 16px", borderRadius: 10, background: `${oc}11`, border: `1px solid ${oc}33` }}>
+          <span style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 14, color: oc, fontWeight: 600 }}>🎯 {analysis.recommendation}</span>
+        </div>
+      </Card>
+      <Card style={{ marginBottom: 20 }}>
+        <h3 style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 16, fontWeight: 700, color: COLORS.text, margin: "0 0 16px" }}>خريطة المهارات</h3>
+        <ResponsiveContainer width="100%" height={280}>
+          <RadarChart data={analysis.radarData}><PolarGrid stroke={COLORS.border} /><PolarAngleAxis dataKey="attr" tick={{ fill: COLORS.textDim, fontSize: 11, fontFamily: "'Noto Kufi Arabic', sans-serif" }} /><PolarRadiusAxis angle={90} domain={[0, 100]} tick={false} axisLine={false} /><Radar name="المهارات" dataKey="value" stroke={COLORS.accent} fill={COLORS.accent} fillOpacity={0.2} strokeWidth={2} /></RadarChart>
+        </ResponsiveContainer>
+      </Card>
+      <Card style={{ marginBottom: 20 }}>
+        <h3 style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 16, fontWeight: 700, color: COLORS.text, margin: "0 0 16px" }}>تفصيل المهارات</h3>
+        <StatBar label="السرعة" value={analysis.speed} /><StatBar label="التمرير" value={analysis.passing} /><StatBar label="التسديد" value={analysis.shooting} /><StatBar label="المراوغة" value={analysis.dribbling} /><StatBar label="التمركز" value={analysis.positioning} /><StatBar label="اللياقة" value={analysis.stamina} /><StatBar label="الرؤية" value={analysis.vision} /><StatBar label="الدفاع" value={analysis.defending} />
+      </Card>
+      <Card style={{ marginBottom: 20 }}>
+        <h3 style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 16, fontWeight: 700, color: COLORS.text, margin: "0 0 12px" }}>المقارنة مع المعايير العمرية ({analysis.benchmarkAge})</h3>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <div style={{ flex: 1, height: 12, background: COLORS.border, borderRadius: 6, position: "relative", overflow: "hidden" }}>
+            <div style={{ position: "absolute", height: "100%", width: `${analysis.benchmarkScore}%`, background: COLORS.textDim + "44", borderRadius: 6 }} />
+            <div style={{ position: "absolute", height: "100%", width: `${analysis.overall}%`, background: analysis.aboveBenchmark ? COLORS.accent : COLORS.warning, borderRadius: 6, transition: "width 1s ease" }} />
+          </div>
+          <Badge color={analysis.aboveBenchmark ? COLORS.accent : COLORS.warning}>{analysis.aboveBenchmark ? "فوق المعيار ↑" : "تحت المعيار ↓"}</Badge>
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8, fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 11, color: COLORS.textDim }}>
+          <span>معيار {analysis.benchmarkAge}: {analysis.benchmarkScore}</span><span>اللاعب: {analysis.overall}</span>
+        </div>
+      </Card>
+      <Card style={{ marginBottom: 20 }}>
+        <h3 style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 16, fontWeight: 700, color: COLORS.text, margin: "0 0 16px" }}>تطور الأداء</h3>
+        <ResponsiveContainer width="100%" height={200}>
+          <LineChart data={analysis.progressData}>
+            <XAxis dataKey="month" tick={{ fill: COLORS.textDim, fontSize: 11, fontFamily: "'Noto Kufi Arabic', sans-serif" }} axisLine={false} tickLine={false} />
+            <YAxis domain={[40, 100]} tick={{ fill: COLORS.textDim, fontSize: 11 }} axisLine={false} tickLine={false} />
+            <Tooltip contentStyle={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 8, fontFamily: "'Noto Kufi Arabic', sans-serif" }} />
+            <Line type="monotone" dataKey="score" stroke={COLORS.accent} strokeWidth={3} dot={{ fill: COLORS.accent, r: 4 }} />
+          </LineChart>
+        </ResponsiveContainer>
+      </Card>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
+        <Card>
+          <h4 style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 14, color: COLORS.accent, margin: "0 0 12px" }}>✅ نقاط القوة</h4>
+          {analysis.strengths.map((s, i) => <div key={i} style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 13, color: COLORS.text, padding: "6px 0", borderBottom: i < 2 ? `1px solid ${COLORS.border}` : "none" }}>{s}</div>)}
+        </Card>
+        <Card>
+          <h4 style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 14, color: COLORS.warning, margin: "0 0 12px" }}>⚠️ يحتاج تطوير</h4>
+          {analysis.weaknesses.map((w, i) => <div key={i} style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 13, color: COLORS.text, padding: "6px 0", borderBottom: i < 1 ? `1px solid ${COLORS.border}` : "none" }}>{w}</div>)}
+        </Card>
+      </div>
+      <Card style={{ marginBottom: 40 }}>
+        <h3 style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 16, fontWeight: 700, color: COLORS.text, margin: "0 0 8px" }}>🧬 Sport DNA</h3>
+        <p style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 14, color: COLORS.textDim, margin: 0 }}>المركز الأنسب بناءً على التحليل: <strong style={{ color: COLORS.accent }}>{analysis.sportDNA}</strong></p>
+      </Card>
+    </div>
+  );
+}
+
+function ScoutDashboard({ onNavigate }) {
+  const [search, setSearch] = useState("");
+  const [filterCity, setFilterCity] = useState("الكل");
+  const [filterPosition, setFilterPosition] = useState("الكل");
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const players = SAMPLE_PLAYERS.map(p => ({ ...p, analysis: generateAnalysis(p.name, p.age, p.position) }));
+  const filtered = players.filter(p => { if (search && !p.name.includes(search)) return false; if (filterCity !== "الكل" && p.city !== filterCity) return false; if (filterPosition !== "الكل" && p.position !== filterPosition) return false; return true; }).sort((a, b) => b.analysis.overall - a.analysis.overall);
+
+  if (selectedPlayer) return <ReportPage player={selectedPlayer} analysis={selectedPlayer.analysis} onNavigate={p => { if (p === "home") setSelectedPlayer(null); else onNavigate(p); }} />;
+
+  const selStyle = { padding: "10px 14px", borderRadius: 10, border: `1px solid ${COLORS.border}`, background: COLORS.bg, color: COLORS.text, fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 13, outline: "none" };
+  return (
+    <div style={{ minHeight: "100vh", padding: "40px 20px", maxWidth: 900, margin: "0 auto" }}>
+      <button onClick={() => onNavigate("home")} style={{ background: "none", border: "none", color: COLORS.accent, cursor: "pointer", fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 14, marginBottom: 20 }}>→ الرئيسية</button>
+      <h2 style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 28, fontWeight: 800, color: COLORS.text, margin: "0 0 8px" }}>🔍 لوحة الكشاف</h2>
+      <p style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", color: COLORS.textDim, fontSize: 14, margin: "0 0 24px" }}>تصفّح المواهب المسجلة وتواصل مع اللاعبين</p>
+      <Card style={{ marginBottom: 24 }}>
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="🔍 ابحث بالاسم..." style={{ ...selStyle, flex: 1, minWidth: 180 }} />
+          <select value={filterCity} onChange={e => setFilterCity(e.target.value)} style={selStyle}><option value="الكل">كل المدن</option>{CITIES.map(c => <option key={c}>{c}</option>)}</select>
+          <select value={filterPosition} onChange={e => setFilterPosition(e.target.value)} style={selStyle}><option value="الكل">كل المراكز</option>{POSITIONS.map(p => <option key={p}>{p}</option>)}</select>
+        </div>
+      </Card>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
+        {filtered.map((p, i) => {
+          const color = p.analysis.overall >= 80 ? COLORS.accent : p.analysis.overall >= 65 ? COLORS.warning : COLORS.danger;
+          return (
+            <Card key={p.id} hoverable onClick={() => setSelectedPlayer(p)}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
+                <div>
+                  <div style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 16, fontWeight: 700, color: COLORS.text, marginBottom: 6 }}>{i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : ""} {p.name}</div>
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}><Badge>{p.position}</Badge><Badge color={COLORS.info}>{p.city}</Badge></div>
+                </div>
+                <div style={{ width: 50, height: 50, borderRadius: "50%", border: `2px solid ${color}`, display: "flex", alignItems: "center", justifyContent: "center", background: `${color}11` }}>
+                  <span style={{ fontSize: 18, fontWeight: 800, color, fontFamily: "monospace" }}>{p.analysis.overall}</span>
+                </div>
+              </div>
+              <div style={{ fontSize: 12, color: COLORS.textDim, fontFamily: "'Noto Kufi Arabic', sans-serif", marginBottom: 8 }}>{p.age} سنة • {p.sport}</div>
+              <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+                {p.analysis.strengths.slice(0, 2).map((s, j) => <span key={j} style={{ fontSize: 10, color: COLORS.accent, background: `${COLORS.accent}11`, padding: "2px 8px", borderRadius: 10, fontFamily: "'Noto Kufi Arabic', sans-serif" }}>{s}</span>)}
+              </div>
+              <div style={{ marginTop: 12, fontSize: 11, color: COLORS.accent, fontFamily: "'Noto Kufi Arabic', sans-serif", textAlign: "center", padding: 6, background: `${COLORS.accent}08`, borderRadius: 8 }}>اضغط لعرض التقرير الكامل →</div>
+            </Card>
+          );
+        })}
       </div>
     </div>
-  </div>
-</section>
+  );
+}
 
-<!-- CTA -->
-<section class="section cta-section">
-  <div class="container" style="text-align:center">
-    <div class="logo-icon" style="margin-bottom:20px">⚡</div>
-    <h2 style="font-size:clamp(28px,5vw,42px); margin-bottom:8px">جاهز تكتشف موهبتك؟</h2>
-    <p style="color:var(--dim); font-size:16px; margin-bottom:32px">التحليل يشتغل حقيقي — جربه بنفسك</p>
-    <a href="pages/demo.html" class="btn btn-primary btn-lg">📸 ابدأ التحليل المجاني</a>
-  </div>
-</section>
-
-<!-- Footer -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-inner">
-      <div>
-        <div class="footer-logo">⚡ SCOUT <span>AI</span></div>
-        <p>اكتشف المواهب — بالذكاء الاصطناعي</p>
-      </div>
-      <div class="footer-links">
-        <a href="pages/demo.html">الديمو</a>
-        <a href="pages/academy.html">للأكاديميات</a>
-        <a href="pages/about.html">عن المشروع</a>
-      </div>
-      <div>
-        <p>هاكاثون الابتكار الرياضي 2026</p>
-        <p>الرياض | أبريل 20-22</p>
-      </div>
+function App() {
+  const [page, setPage] = useState("home");
+  const [player, setPlayer] = useState(null);
+  const [analysis, setAnalysis] = useState(null);
+  return (
+    <div style={{ background: COLORS.bg, minHeight: "100vh", direction: "rtl", fontFamily: "'Noto Kufi Arabic', 'Segoe UI', sans-serif" }}>
+      {page === "home" && <LandingPage onNavigate={setPage} />}
+      {page === "upload" && <UploadPage onNavigate={setPage} onAnalyze={d => { setPlayer(d); setPage("analyzing"); }} />}
+      {page === "analyzing" && <AnalyzingPage player={player} onComplete={r => { setAnalysis(r); setPage("report"); }} />}
+      {page === "report" && <ReportPage player={player} analysis={analysis} onNavigate={setPage} />}
+      {page === "scout" && <ScoutDashboard onNavigate={setPage} />}
     </div>
-    <div class="footer-bottom">© 2026 SCOUT AI — جميع الحقوق محفوظة</div>
-  </div>
-</footer>
+  );
+}
 
+ReactDOM.render(<App />, document.getElementById('root'));
+</script>
 </body>
 </html>
