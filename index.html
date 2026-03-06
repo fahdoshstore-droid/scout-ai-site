@@ -211,7 +211,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 <button class="nav-btn" onclick="show('features')">Features</button>
 <button class="nav-btn" onclick="show('pricing')">Pricing</button>
 </div>
-<button onclick="toggleLang()" style="background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:8px;cursor:pointer;font-family:inherit;font-weight:600;">🌐 AR</button>
+
 </nav>
 
 <main class="main">
@@ -496,11 +496,11 @@ function generateChart() {
   });
 }
 
-let isArabic = false;
+let isArabic = true;
 function toggleLang() {
   isArabic = !isArabic;
-  document.documentElement.lang = isArabic ? "ar" : "en";
-  document.documentElement.dir = isArabic ? "rtl" : "ltr";
+  
+  
   document.querySelector("button[onclick^=toggleLang]").innerText = isArabic ? "🌐 EN" : "🌐 AR";
 }
 function resetDemo() {
