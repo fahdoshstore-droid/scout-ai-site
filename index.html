@@ -376,20 +376,23 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 
 <script>
 function show(id) {
+  if(event) event.preventDefault();
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
+  if(event && event.target) event.target.classList.add('active');
 }
 
 function demoTab(id) {
+  if(event) event.preventDefault();
   document.querySelectorAll('.demo-screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
-  event.target.classList.add('active');
+  if(event && event.target) event.target.classList.add('active');
 }
 
 function startAnalysis() {
+  if(event) event.preventDefault();
   demoTab('analyzing');
   const status = document.getElementById('analysisStatus');
   const bar = document.getElementById('progressBar');
