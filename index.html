@@ -183,7 +183,7 @@ function UploadPage({ onNavigate, onAnalyze }) {
           <div><label style={{ fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 12, color: COLORS.textDim, display: "block", marginBottom: 6 }}>المركز</label><select value={form.position} onChange={e => setForm({ ...form, position: e.target.value })} style={inputStyle}>{POSITIONS.map(p => <option key={p} value={p}>{p}</option>)}</select></div>
         </div>
       </Card>
-      <button onClick={() => { if (form.name && form.age) onAnalyze({ ...form, age: parseInt(form.age), useAPI: true }); }} disabled={!form.name || !form.age}
+      <button onClick={() => { if (form.name && form.age) onAnalyze({ ...form, age: parseInt(form.age) }); }} disabled={!form.name || !form.age}
         style={{ width: "100%", padding: 16, borderRadius: 12, border: "none", background: form.name && form.age ? `linear-gradient(135deg, ${COLORS.accent}, ${COLORS.accentDim})` : COLORS.border, color: form.name && form.age ? COLORS.bg : COLORS.textDim, fontFamily: "'Noto Kufi Arabic', sans-serif", fontSize: 16, fontWeight: 700, cursor: form.name && form.age ? "pointer" : "not-allowed", boxShadow: form.name && form.age ? `0 4px 20px ${COLORS.accentGlow}` : "none" }}>
         ⚡ ابدأ التحليل بالذكاء الاصطناعي
       </button>
@@ -196,7 +196,7 @@ function AnalyzingPage({ player, onComplete }) {
   const [step, setStep] = useState(0);
   const steps = ["جاري تحميل الفيديو…", "تحليل حركة اللاعب…", "قياس السرعة والتسارع…", "تقييم المهارات الفنية…", "مقارنة مع المعايير العمرية…", "إنشاء التقرير النهائي…"];
   useEffect(() => {
-    const iv = setInterval(() => setProgress(p => { if (p >= 100) { clearInterval(iv); setTimeout(() => fetch("http://localhost:3000/api/analyze", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({name: player.name, age: player.age, position: player.position})}).then(r=>r.json()).then(data=>{ const result = data.analysis || generateAnalysis(player.name, player.age, player.position); onComplete(result); }).catch(() => { onComplete(generateAnalysis(player.name, player.age, player.position)); }), 500); return 100; } return p + 2; }), 80);
+    const iv = setInterval(() => setProgress(p => { if (p >= 100) { clearInterval(iv); setTimeout(() => onComplete(generateAnalysis(player.name, player.age, player.position)), 500); return 100; } return p + 2; }), 80);
     return () => clearInterval(iv);
   }, []);
   useEffect(() => { setStep(Math.min(Math.floor(progress / (100 / steps.length)), steps.length - 1)); }, [progress]);
