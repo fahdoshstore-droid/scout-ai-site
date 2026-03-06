@@ -3,287 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SCOUT AI — اكتشف المواهب</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <title>SCOUT AI</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/recharts/umd/Recharts.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #0a0f1a; font-family: 'Noto Kufi Arabic', sans-serif; }
+    body { margin: 0; background: #0a0f1a; font-family: sans-serif; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; text-align: center; }
+    .btn { background: #00e676; color: #0a0f1a; padding: 15px 30px; border: none; border-radius: 10px; font-size: 18px; cursor: pointer; margin: 10px; }
+    .card { background: #111827; padding: 20px; border-radius: 15px; margin: 10px 0; }
+    .score { font-size: 48px; font-weight: bold; color: #00e676; }
   </style>
-  <script src="https://cdn.jsdelivr.net/react@18/umd/react.production.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/recharts/umd/Recharts.js"></script>
-  <script src="https://cdn.jsdelivr.net/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    const { useState, useEffect, useRef } = React;
-    const { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } = Recharts;
-
-    const COLORS = { 
-      bg: "#0a0f1a", card: "#111827", cardHover: "#1a2236",
-      accent: "#00e676", accentDim: "#00c853", accentGlow: "rgba(0, 230, 118, 0.15)",
-      text: "#f0f4f8", textDim: "#8892a4", border: "#1e2a3a", 
-      warning: "#ffc107", danger: "#ff5252", info: "#42a5f5"
-    };
+    const { useState } = React;
     
-    const POSITIONS = ["مهاجم", "وسط", "مدافع", "حارس مرمي"];
-    const SPORTS = ["كرة قدم", "كرة سلة", "كرة طائرة", "سباحة", "ألعاب قوى"];
-    const CITIES = ["الرياض", "جدة", "الدمام", "مكة", "المدينة", "الخبر", "أبها", "تبوك"];
-
-    const generateAnalysis = (n, a, p) => {
-      const r = (min, max) => Math.round(min + (Math.random() * (max - min)));
-      const s = r(55, 95), pas = r(50, 92), sho = r(45, 96), dri = r(50, 93), pos = r(55, 90), sta = r(60, 95), vis = r(50, 88), def = p === "مدافع" || p === "حارس مرمي" ? r(70, 95) : r(35, 70);
-      const overall = Math.round((s + pas + sho + dri + pos + sta + vis + def) / 8);
-      return {
-        overall, radarData: [
-          { attr: "السرعة", value: s }, { attr: "التمرير", value: pas }, { attr: "التسديد", value: sho }, 
-          { attr: "المراوغة", value: dri }, { attr: "التمركز", value: pos }, { attr: "اللياقة", value: sta }, 
-          { attr: "الرؤية", value: vis }, { attr: "الدفاع", value: def }
-        ],
-        speed: s, passing: pas, shooting: sho, dribbling: dri, positioning: pos, stamina: sta, vision: vis, defending: def,
-        strengths: ["السرعة", "التسديد", "المراوغة"], weaknesses: ["الدفاع"],
-        recommendation: overall >= 80 ? "موهبة استثنائية — مرشح للاحتراف" : overall >= 65 ? "موهبة واعدة — يحتاج تطوير" : "مستوى جيد — يحتاج تدريب مكثف",
-        sportDNA: overall >= 75 ? p : p === "مهاجم" ? "جناح" : "وسط دفاعي",
-        benchmarkScore: a <= 16 ? 62 : a <= 18 ? 68 : 73,
-        benchmarkAge: a <= 16 ? "U-17" : a <= 18 ? "U-19" : a <= 21 ? "U-21" : "Senior",
-        aboveBenchmark: overall >= (a <= 16 ? 62 : a <= 18 ? 68 : 73),
-        progressData: [
-          { month: "يناير", score: overall - r(5, 15) }, { month: "فبراير", score: overall - r(3, 12) },
-          { month: "مارس", score: overall - r(2, 8) }, { month: "أبريل", score: overall - r(0, 5) },
-          { month: "مايو", score: overall }, { month: "يونيو", score: overall + r(0, 3) },
-        ]
-      };
-    };
-
-    const SAMPLE = [
-      { id: 1, name: "عبدالله الشمري", age: 17, city: "الرياض", position: "مهاجم" },
-      { id: 2, name: "فيصل القحطاني", age: 16, city: "جدة", position: "وسط" },
-      { id: 3, name: "محمد الدوسري", age: 19, city: "الدمام", position: "مدافع" },
-      { id: 4, name: "خالد العتيبي", age: 15, city: "مكة", position: "حارس مرمي" },
-      { id: 5, name: "سلطان الحربي", age: 18, city: "الخبر", position: "مهاجم" },
-    ];
-
-    function GlowOrb({ style }) {
-      return <div style={{ position: "absolute", width: 300, height: 300, borderRadius: "50%", background: `radial-gradient(circle, ${COLORS.accentGlow}, transparent 70%)`, filter: "blur(60px)", pointerEvents: "none", zIndex: 0, ...style }} />;
-    }
-
-    function Badge({ c = COLORS.accent, children }) { 
-      return <span style={{ display: "inline-block", padding: "3px 10px", borderRadius: 20, fontSize: 11, background: c + "22", color: c, border: "1px solid " + c + "44", marginRight: 6 }}>{children}</span>; 
-    }
-    
-    function StatBar({ l, v }) { 
-      return (<div style={{ marginBottom: 10 }}><div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}><span style={{ color: COLORS.textDim, fontSize: 13 }}>{l}</span><span style={{ color: COLORS.text, fontSize: 13, fontWeight: 700 }}>{v}</span></div><div style={{ height: 6, background: COLORS.border, borderRadius: 3 }}><div style={{ height: "100%", width: v + "%", background: v >= 80 ? COLORS.accent : v >= 60 ? COLORS.warning : COLORS.danger, borderRadius: 3 }} /></div></div>); 
-    }
-    
-    function Card({ onClick, h, children, style }) { 
-      const [H, setH] = useState(false); 
-      return (<div onClick={onClick} onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)} style={{ background: H && h ? COLORS.cardHover : COLORS.card, border: "1px solid " + (H && h ? COLORS.accent + "44" : COLORS.border), borderRadius: 16, padding: 24, cursor: onClick ? "pointer" : "default", transition: "all 0.3s", ...style }}>{children}</div>); 
-    }
-
-    function Landing({ onNavigate }) {
-      const [v, setV] = useState(false);
-      useEffect(() => { setTimeout(() => setV(true), 100); }, []);
-      return (
-        <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 20, textAlign: "center", position: "relative", overflow: "hidden" }}>
-          <GlowOrb style={{ top: -100, left: -100 }} />
-          <GlowOrb style={{ bottom: -100, right: -100 }} />
-          <div style={{ opacity: v ? 1 : 0, transform: v ? "translateY(0)" : "translateY(30px)", transition: "all 0.8s", zIndex: 1 }}>
-            <div style={{ width: 90, height: 90, borderRadius: "50%", background: "linear-gradient(135deg, #00e676, #00c853)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px", boxShadow: "0 0 40px rgba(0, 230, 118, 0.15)" }}><span style={{ fontSize: 40 }}>⚡</span></div>
-            <h1 style={{ fontSize: "clamp(32px, 6vw, 56px)", fontWeight: 800, color: COLORS.text, margin: "0 0 8px" }}>SCOUT <span style={{ color: COLORS.accent }}>AI</span></h1>
-            <p style={{ color: COLORS.textDim, margin: "0 0 40px" }}>اكتشف المواهب الرياضية بالذكاء الاصطناعي</p>
-            <div style={{ display: "flex", gap: 16, justifyContent: "center" }}>
-              <button onClick={() => onNavigate("upload")} style={{ padding: "14px 36px", borderRadius: 12, border: "none", background: "linear-gradient(135deg, #00e676, #00c853)", color: COLORS.bg, fontSize: 16, fontWeight: 700, cursor: "pointer" }}>🎬 ارفع فيديو</button>
-              <button onClick={() => onNavigate("scout")} style={{ padding: "14px 36px", borderRadius: 12, border: "2px solid #00e67644", background: "transparent", color: COLORS.accent, fontSize: 16, fontWeight: 600, cursor: "pointer" }}>🔍 الكشاف</button>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    function Upload({ onNavigate, onAnalyze }) {
-      const [f, setF] = useState({ name: "", age: "", city: CITIES[0], position: POSITIONS[0], sport: SPORTS[0] });
-      const [videoFile, setVideoFile] = useState(null);
-      const [dragOver, setDragOver] = useState(false);
-      const fileRef = useRef(null);
-      
-      const inputStyle = { width: "100%", padding: "12px", borderRadius: 10, border: "1px solid " + COLORS.border, background: COLORS.bg, color: COLORS.text };
-      
-      return (
-        <div style={{ minHeight: "100vh", padding: "40px 20px", maxWidth: 600, margin: "0 auto" }}>
-          <button onClick={() => onNavigate("home")} style={{ background: "none", border: "none", color: COLORS.accent, cursor: "pointer", marginBottom: 20 }}>← الرئيسية</button>
-          <h2 style={{ fontSize: 28, fontWeight: 800, color: COLORS.text, margin: "0 0 24px" }}>تحليل موهبة جديدة</h2>
-          
-          <div onDragOver={e => { e.preventDefault(); setDragOver(true); }} onDragLeave={() => setDragOver(false)} onDrop={e => { e.preventDefault(); setDragOver(false); setVideoFile(e.dataTransfer.files[0]); }} onClick={() => fileRef.current?.click()}
-            style={{ border: "2px dashed " + (dragOver ? COLORS.accent : COLORS.border), borderRadius: 16, padding: 40, textAlign: "center", cursor: "pointer", background: dragOver ? COLORS.accentGlow : COLORS.card, marginBottom: 24 }}>
-            <input ref={fileRef} type="file" accept="video/*,image/*" style={{ display: "none" }} onChange={e => setVideoFile(e.target.files[0])} />
-            <div style={{ fontSize: 40, marginBottom: 12 }}>{videoFile ? "✅" : "🎥"}</div>
-            <div style={{ color: videoFile ? COLORS.accent : COLORS.textDim }}>{videoFile ? videoFile.name : "اسحب الفيديو هنا"}</div>
-          </div>
-          
-          <Card style={{ marginBottom: 16 }}>
-            <div style={{ display: "grid", gap: 12 }}>
-              <input value={f.name} onChange={e => setF({...f, name: e.target.value})} placeholder="اسم اللاعب" style={inputStyle} />
-              <input type="number" value={f.age} onChange={e => setF({...f, age: e.target.value})} placeholder="العمر" style={inputStyle} />
-              <select value={f.position} onChange={e => setF({...f, position: e.target.value})} style={inputStyle}>
-                {POSITIONS.map(p => <option key={p} value={p}>{p}</option>)}
-              </select>
-            </div>
-          </Card>
-          
-          <button onClick={() => f.name && f.age && onAnalyze({...f, age: parseInt(f.age)})} disabled={!f.name || !f.age} 
-            style={{ width: "100%", padding: 16, borderRadius: 12, border: "none", background: f.name && f.age ? COLORS.accent : COLORS.border, color: f.name && f.age ? COLORS.bg : COLORS.textDim, fontSize: 16, fontWeight: 700 }}>
-            ⚡ ابدأ التحليل
-          </button>
-        </div>
-      );
-    }
-
-    function Analyzing({ player, onComplete }) {
-      const [p, setP] = useState(0);
-      useEffect(() => {
-        const i = setInterval(() => {
-          setP(x => {
-            if (x >= 100) {
-              clearInterval(i);
-              fetch("http://localhost:3000/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: player.name, age: player.age, position: player.position }) })
-                .then(r => r.json()).then(d => setTimeout(() => onComplete(d.analysis || generateAnalysis(player.name, player.age, player.position)), 500))
-                .catch(() => setTimeout(() => onComplete(generateAnalysis(player.name, player.age, player.position)), 500));
-              return 100;
-            }
-            return x + 2;
-          });
-        }, 80);
-        return () => clearInterval(i);
-      }, []);
-      
-      return (
-        <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ width: 120, height: 120, borderRadius: "50%", border: "3px solid " + COLORS.border, borderTopColor: COLORS.accent, animation: "spin 1s linear infinite" }} />
-          <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
-          <h2 style={{ color: COLORS.text, marginTop: 32 }}>جاري تحليل {player.name}</h2>
-          <div style={{ width: 300, height: 8, background: COLORS.border, borderRadius: 4, marginTop: 24 }}><div style={{ height: "100%", width: p + "%", background: COLORS.accent }} /></div>
-        </div>
-      );
-    }
-
-    function Report({ player, analysis, onNavigate }) {
-      const [tab, setTab] = useState("skills");
-      const c = analysis.overall >= 80 ? COLORS.accent : analysis.overall >= 65 ? COLORS.warning : COLORS.danger;
-      
-      return (
-        <div style={{ minHeight: "100vh", padding: "40px 20px", maxWidth: 700, margin: "0 auto" }}>
-          <button onClick={() => onNavigate("home")} style={{ background: "none", border: "none", color: COLORS.accent, cursor: "pointer", marginBottom: 20 }}>← الرئيسية</button>
-          
-          <Card style={{ marginBottom: 20 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <div>
-                <h2 style={{ color: COLORS.text, marginBottom: 8 }}>{player.name}</h2>
-                <Badge>{player.position}</Badge>
-                <Badge c={COLORS.info}>{player.city}</Badge>
-              </div>
-              <div style={{ width: 80, height: 80, borderRadius: "50%", border: "3px solid " + c, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ fontSize: 30, fontWeight: 800, color: c }}>{analysis.overall}</span>
-              </div>
-            </div>
-          </Card>
-          
-          <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
-            {["skills", "comparison", "development"].map(t => (
-              <button key={t} onClick={() => setTab(t)} style={{ flex: 1, padding: 12, borderRadius: 10, border: "none", background: tab === t ? COLORS.accent : COLORS.card, color: tab === t ? COLORS.bg : COLORS.textDim }}>
-                {t === "skills" ? "المهارات" : t === "comparison" ? "المقارنة" : "التطور"}
-              </button>
-            ))}
-          </div>
-          
-          {tab === "skills" && (
-            <Card style={{ marginBottom: 20 }}>
-              <h3 style={{ color: COLORS.text, marginBottom: 16 }}>خريطة المهارات</h3>
-              <ResponsiveContainer width="100%" height={280}>
-                <RadarChart data={analysis.radarData}>
-                  <PolarGrid stroke={COLORS.border} />
-                  <PolarAngleAxis dataKey="attr" tick={{ fill: COLORS.textDim, fontSize: 11 }} />
-                  <PolarRadiusAxis angle={90} domain={[0, 100]} tick={false} />
-                  <Radar dataKey="value" stroke={COLORS.accent} fill={COLORS.accent} fillOpacity={0.2} />
-                </RadarChart>
-              </ResponsiveContainer>
-            </Card>
-          )}
-          
-          {tab === "comparison" && (
-            <Card style={{ marginBottom: 20 }}>
-              <h3 style={{ color: COLORS.text }}>المقارنة: {analysis.overall} vs {analysis.benchmarkScore}</h3>
-              <div style={{ marginTop: 16 }}>
-                <Badge c={analysis.aboveBenchmark ? COLORS.accent : COLORS.warning}>
-                  {analysis.aboveBenchmark ? "فوق المعيار ↑" : "تحت المعيار ↓"}
-                </Badge>
-              </div>
-            </Card>
-          )}
-          
-          {tab === "development" && (
-            <Card style={{ marginBottom: 20 }}>
-              <h3 style={{ color: COLORS.text, marginBottom: 16 }}>تطور الأداء</h3>
-              <ResponsiveContainer width="100%" height={200}>
-                <LineChart data={analysis.progressData}>
-                  <XAxis dataKey="month" tick={{ fill: COLORS.textDim, fontSize: 11 }} />
-                  <YAxis domain={[40, 100]} tick={{ fill: COLORS.textDim, fontSize: 11 }} />
-                  <Line type="monotone" dataKey="score" stroke={COLORS.accent} strokeWidth={3} />
-                </LineChart>
-              </ResponsiveContainer>
-            </Card>
-          )}
-        </div>
-      );
-    }
-
-    function Scout({ onNavigate }) {
-      const [sp, setSp] = useState(null);
-      const players = SAMPLE.map(p => ({ ...p, analysis: generateAnalysis(p.name, p.age, p.position) }));
-      if (sp) return <Report player={sp} analysis={sp.analysis} onNavigate={() => setSp(null)} />;
-      return (
-        <div style={{ minHeight: "100vh", padding: "40px 20px", maxWidth: 900, margin: "0 auto" }}>
-          <button onClick={() => onNavigate("home")} style={{ background: "none", border: "none", color: COLORS.accent, cursor: "pointer", marginBottom: 20 }}>← الرئيسية</button>
-          <h2 style={{ fontSize: 28, fontWeight: 800, color: COLORS.text, marginBottom: 24 }}>🔍 لوحة الكشاف</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
-            {players.map((p, i) => { 
-              const c = p.analysis.overall >= 80 ? COLORS.accent : p.analysis.overall >= 65 ? COLORS.warning : COLORS.danger;
-              return (
-                <Card key={p.id} h onClick={() => setSp(p)}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <div>
-                      <div style={{ fontWeight: 700, color: COLORS.text }}>{i+1}. {p.name}</div>
-                      <Badge>{p.position}</Badge>
-                    </div>
-                    <div style={{ width: 50, height: 50, borderRadius: "50%", border: "2px solid " + c, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <span style={{ fontWeight: 800, color: c }}>{p.analysis.overall}</span>
-                    </div>
-                  </div>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-      );
-    }
-
     function App() {
-      const [page, setPage] = useState("home");
+      const [page, setPage] = useState('home');
       const [player, setPlayer] = useState(null);
-      const [analysis, setAnalysis] = useState(null);
-      return (
-        <div style={{ background: COLORS.bg, minHeight: "100vh", direction: "rtl" }}>
-          {page === "home" && <Landing onNavigate={setPage} />}
-          {page === "upload" && <Upload onNavigate={setPage} onAnalyze={p => { setPlayer(p); setPage("analyzing"); }} />}
-          {page === "analyzing" && <Analyzing player={player} onComplete={r => { setAnalysis(r); setPage("report"); }} />}
-          {page === "report" && <Report player={player} analysis={analysis} onNavigate={setPage} />}
-          {page === "scout" && <Scout onNavigate={setPage} />}
+      
+      function analyze() {
+        setPage('analyzing');
+        setTimeout(() => {
+          setPlayer({ name: 'فهد', age: 17, position: 'مهاجم', score: 84 });
+          setPage('report');
+        }, 2000);
+      }
+      
+      if (page === 'home') return (
+        <div className="container">
+          <h1>SCOUT AI</h1>
+          <button className="btn" onClick={analyze}>🎬 ارفع فيديو</button>
+        </div>
+      );
+      
+      if (page === 'analyzing') return (
+        <div className="container">
+          <h2>جاري التحليل...</h2>
+        </div>
+      );
+      
+      if (page === 'report') return (
+        <div className="container">
+          <div className="card">
+            <h2>{player.name}</h2>
+            <p>{player.position} - {player.age} سنة</p>
+            <div className="score">{player.score}</div>
+            <p>موهبة استثنائية</p>
+          </div>
+          <button className="btn" onClick={() => setPage('home')}>الرئيسية</button>
         </div>
       );
     }
-
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
+    
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
   </script>
 </body>
 </html>
