@@ -3,242 +3,225 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SCOUT AI — الديمو الحي</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>SCOUT AI - الديمو</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #0a0f1a; min-height: 100vh; }
-.demo-nav { position: fixed; top: 0; width: 100%; z-index: 100; background: rgba(10,15,26,0.9); backdrop-filter: blur(16px); border-bottom: 1px solid #1e2a3a; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
-.demo-nav a { color: #00e676; text-decoration: none; font-family: 'Noto Kufi Arabic', sans-serif; font-size: 14px; font-weight: 600; }
-.demo-nav .logo { font-size: 18px; font-weight: 900; color: #f0f4f8; }
-.demo-nav .logo span { color: #00e676; }
-.demo-badge { padding: 4px 12px; border-radius: 20px; background: rgba(0,230,118,0.1); border: 1px solid rgba(0,230,118,0.2); color: #00e676; font-size: 11px; font-weight: 600; font-family: 'Noto Kufi Arabic', sans-serif; }
-#root { padding-top: 52px; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Kufi Arabic',sans-serif;background:#0a0f1a;color:#eef2f7;min-height:100vh}
+.nav{position:fixed;top:0;width:100%;background:rgba(10,15,26,0.95);padding:12px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #1e2a3a;z-index:100}
+.logo{font-size:18px;font-weight:900}
+.logo span{color:#00e676}
+.back{color:#00e676;text-decoration:none;font-size:14px}
+.main{padding-top:60px;padding:20px;max-width:600px;margin:0 auto}
+.card{background:#0f1729;border:1px solid #1e2a3a;border-radius:16px;padding:24px;margin-bottom:20px}
+.btn{width:100%;padding:14px;border-radius:12px;border:none;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer}
+.btn-primary{background:linear-gradient(135deg,#00e676,#00c853);color:#0a0f1a}
+.btn-secondary{background:#0f1729;color:#eef2f7;border:1px solid #1e2a3a}
+input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #1e2a3a;background:#0a0f1a;color:#eef2f7;font-family:inherit;margin-bottom:12px}
+.title{text-align:center;margin-bottom:20px;font-size:24px;font-weight:700}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.name{font-size:22px;font-weight:700}
+.badge{display:inline-block;padding:4px 12px;border-radius:20px;background:rgba(0,230,118,0.15);color:#00e676;font-size:12px;margin-left:8px}
+.score{width:70px;height:70px;border-radius:50%;border:3px solid #00e676;display:flex;align-items:center;justify-content:center;background:rgba(0,230,118,0.15)}
+.score-num{font-size:24px;font-weight:900;color:#00e676}
+.skill{display:flex;justify-content:space-between;margin-bottom:6px}
+.skill-name{color:#6b7a90;font-size:14px}
+.skill-value{color:#00e676;font-weight:700}
+.skill-bar{height:6px;background:#1e2a3a;border-radius:3px;overflow:hidden;margin-bottom:14px}
+.skill-fill{height:100%;background:#00e676}
+.dna{background:#0a0f1a;border:1px solid #ffd700;border-radius:12px;padding:16px;text-align:center;margin-top:16px}
+.dna-title{color:#ffd700;font-weight:700;margin-bottom:12px}
+.dna-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.dna-item{background:#0f1729;border:1px solid #1e2a3a;border-radius:8px;padding:10px}
+.dna-item.recommended{border-color:#ffd700;background:rgba(255,215,0,0.1)}
+.dna-match{font-size:18px;font-weight:800}
+.dna-item.recommended .dna-match{color:#ffd700}
+.dna-pos{font-size:10px;color:#6b7a90}
+.scout{background:linear-gradient(135deg,rgba(0,230,118,0.15),transparent);border:1px solid #00e676;border-radius:12px;padding:16px;text-align:center;margin-top:16px}
+.scout-title{color:#00e676;font-weight:700;margin-bottom:12px}
+.scout-grid{display:flex;justify-content:center;gap:20px}
+.scout-item{text-align:center}
+.scout-label{font-size:11px;color:#6b7a90}
+.scout-value{font-size:20px;font-weight:800;color:#00e676}
+.scout-final{font-size:24px;font-weight:900;color:#ffd700}
+.loader{font-size:48px;text-align:center;animation:bounce 1s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.progress{height:6px;background:#1e2a3a;border-radius:3px;overflow:hidden;max-width:300px;margin:20px auto}
+.progress-fill{height:100%;background:#00e676;width:0%;transition:width 0.3s}
+.status{text-align:center;color:#00e676;margin-top:12px}
+.chart{max-width:300px;margin:0 auto}
+.hidden{display:none}
 </style>
 </head>
 <body>
+<nav class="nav">
+<a href="../index.html" class="back">← الرئيسية</a>
+<span class="logo">⚡ SCOUT <span>AI</span></span>
+<span></span>
+</nav>
 
-<div class="demo-nav">
-  <a href="../index.html">← الرئيسية</a>
-  <span class="logo">⚡ SCOUT <span>AI</span></span>
-  <span class="demo-badge">🧠 تحليل حقيقي</span>
+<main class="main">
+<!-- Register -->
+<div id="register" class="card">
+<h2 class="title">تسجيل لاعب جديد</h2>
+<input type="text" id="playerName" placeholder="اسم اللاعب">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<input type="number" id="playerAge" placeholder="العمر">
+<select id="playerCity"><option>الرياض</option><option>جدة</option><option>الدمام</option></select>
+</div>
+<select id="playerPos"><option>مهاجم</option><option>جناح</option><option>وسط هجومي</option><option>وسط دفاعي</option><option>مدافع</option></select>
+<button class="btn btn-primary" onclick="startAnalysis()">🤖 ابدأ التحليل</button>
 </div>
 
-<div id="root"></div>
+<!-- Analyzing -->
+<div id="analyzing" class="card hidden">
+<div class="loader">⚽</div>
+<div class="status" id="status">جاري التحليل...</div>
+<div class="progress"><div class="progress-fill" id="progress"></div></div>
+</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.7.3/Recharts.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.6/babel.min.js"></script>
+<!-- Results -->
+<div id="results" class="card hidden">
+<div class="header">
+<div><div class="name" id="resName">أحمد</div><div><span class="badge" id="resPos">مهاجم</span><span class="badge" style="background:#0a0f1a;color:#6b7a90" id="resAge">17 سنة</span></div></div>
+<div class="score"><div class="score-num" id="resScore">84</div></div>
+</div>
 
-<script type="text/babel">
-// Note: This is a simplified standalone version for GitHub Pages
-// The full demo with AI analysis requires an API key configured in a backend
+<div class="skill"><span class="skill-name">⚡ السرعة</span><span class="skill-value" id="s1">87</span></div>
+<div class="skill-bar"><div class="skill-fill" id="b1" style="width:87%"></div></div>
 
-const { useState, useEffect, useRef } = React;
-const { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer } = Recharts;
+<div class="skill"><span class="skill-name">🎯 التسديد</span><span class="skill-value" id="s2">81</span></div>
+<div class="skill-bar"><div class="skill-fill" id="b2" style="width:81%"></div></div>
 
-const C = { bg:"#0a0f1a", card:"#111827", cardHover:"#1a2236", accent:"#00e676", accentDim:"#00c853", accentGlow:"rgba(0,230,118,0.15)", text:"#f0f4f8", textDim:"#8892a4", textMid:"#b0b8c8", border:"#1e2a3a", danger:"#ff5252", warning:"#ffc107", info:"#42a5f5", gold:"#ffd700", cyan:"#00bcd4" };
-const F = "'Noto Kufi Arabic', sans-serif";
-const M = "'JetBrains Mono', monospace";
-const POSITIONS = ["مهاجم","جناح","وسط هجومي","وسط دفاعي","مدافع","حارس مرمى"];
-const CITIES = ["الرياض","جدة","الدمام","مكة","المدينة","الخبر","أبها","تبوك"];
-const SK = {speed:"السرعة",passing:"التمرير",shooting:"التسديد",dribbling:"المراوغة",positioning:"التمركز",stamina:"اللياقة",vision:"الرؤية",defending:"الدفاع"};
-const SKK = Object.keys(SK);
+<div class="skill"><span class="skill-name">👟 التمرير</span><span class="skill-value" id="s3">82</span></div>
+<div class="skill-bar"><div class="skill-fill" id="b3" style="width:82%"></div></div>
 
-const PW = {
-  "مهاجم":{shooting:.28,positioning:.20,speed:.18,dribbling:.14,vision:.08,passing:.05,stamina:.04,defending:.03},
-  "جناح":{speed:.25,dribbling:.22,passing:.15,shooting:.12,stamina:.10,vision:.08,positioning:.05,defending:.03},
-  "وسط هجومي":{vision:.25,passing:.22,positioning:.15,dribbling:.12,shooting:.10,speed:.08,stamina:.05,defending:.03},
-  "وسط دفاعي":{defending:.22,stamina:.20,positioning:.18,passing:.15,vision:.10,speed:.08,shooting:.04,dribbling:.03},
-  "مدافع":{defending:.28,positioning:.22,stamina:.15,speed:.12,passing:.08,vision:.08,shooting:.04,dribbling:.03},
-  "حارس مرمى":{defending:.30,positioning:.25,vision:.15,stamina:.10,speed:.08,passing:.07,shooting:.03,dribbling:.02},
-};
+<div class="skill"><span class="skill-name">🏃 المراوغة</span><span class="skill-value" id="s4">84</span></div>
+<div class="skill-bar"><div class="skill-fill" id="b4" style="width:84%"></div></div>
 
-function calcW(sk,pos){const w=PW[pos]||PW["مهاجم"];return Math.round(SKK.reduce((s,k)=>s+(sk[k]||50)*(w[k]||.125),0));}
-function calcDNA(sk){const r={};POSITIONS.forEach(p=>r[p]=calcW(sk,p));const sorted=Object.entries(r).sort((a,b)=>b[1]-a[1]);return{best:sorted[0],sorted};}
+<div class="skill"><span class="skill-name">👁️ الرؤية</span><span class="skill-value" id="s5">79</span></div>
+<div class="skill-bar"><div class="skill-fill" id="b5" style="width:79%"></div></div>
 
-// Simulated analysis for GitHub Pages (no API key needed)
-function simAnalysis(name,age,pos){
-  const seed=name.split('').reduce((a,c)=>a+c.charCodeAt(0),0)+age;
-  const h=(s,i)=>{let x=s*1000+i*17;x=((x>>16)^x)*0x45d9f3b;x=((x>>16)^x)*0x45d9f3b;return((x>>16)^x&0x7fffffff)/0x7fffffff;};
-  let c=0;const r=(b,v)=>{c++;return Math.min(99,Math.max(30,Math.round(b+(h(seed,c)*2-1)*v)));};
-  const profiles={"مهاجم":{speed:r(82,8),passing:r(65,10),shooting:r(85,8),dribbling:r(80,8),positioning:r(83,7),stamina:r(70,10),vision:r(65,10),defending:r(40,10)},"جناح":{speed:r(88,6),passing:r(70,10),shooting:r(72,10),dribbling:r(85,7),positioning:r(75,8),stamina:r(78,8),vision:r(72,8),defending:r(42,10)},"وسط هجومي":{speed:r(72,8),passing:r(85,6),shooting:r(75,8),dribbling:r(78,8),positioning:r(80,7),stamina:r(75,8),vision:r(88,6),defending:r(55,10)},"وسط دفاعي":{speed:r(68,8),passing:r(78,8),shooting:r(55,10),dribbling:r(62,10),positioning:r(82,7),stamina:r(85,6),vision:r(75,8),defending:r(82,7)},"مدافع":{speed:r(70,8),passing:r(62,10),shooting:r(42,10),dribbling:r(50,10),positioning:r(85,6),stamina:r(82,7),vision:r(65,10),defending:r(88,6)},"حارس مرمى":{speed:r(55,10),passing:r(55,12),shooting:r(30,8),dribbling:r(35,8),positioning:r(88,6),stamina:r(72,8),vision:r(78,8),defending:r(90,5)}};
-  const sk=profiles[pos]||profiles["مهاجم"];
-  const sorted=SKK.map(k=>({k,v:sk[k]})).sort((a,b)=>b.v-a.v);
-  return{skills:sk,body:"تقييم مبني على بيانات المركز والعمر",observations:["أداء متوازن حسب المركز","يحتاج تحليل بصورة لنتائج أدق"],strengths:sorted.slice(0,3).map(s=>SK[s.k]),weaknesses:sorted.slice(-2).map(s=>SK[s.k]),recommendation:calcW(sk,pos)>=75?"موهبة واعدة — يحتاج تطوير مستهدف":"مستوى جيد — يحتاج تدريب مكثف",rating:calcW(sk,pos)>=80?"A+":calcW(sk,pos)>=75?"A":calcW(sk,pos)>=68?"B+":"B",best_pos:calcDNA(sk).best[0],tips:["التركيز على تطوير "+sorted.slice(-1)[0].k,"تمارين لياقة مخصصة","مشاهدة مباريات لتحسين الوعي التكتيكي"],player_comparison:"يحتاج صورة لتحديد",comparison_why:""};
+<div class="skill"><span class="skill-name">🎮 التحكم</span><span class="skill-value" id="s6">86</span></div>
+<div class="skill-bar"><div class="skill-fill" id="b6" style="width:86%"></div></div>
+
+<div class="chart"><canvas id="radarChart"></canvas></div>
+
+<div class="dna">
+<div class="dna-title">🧬 Sport DNA - أفضل مركز</div>
+<div class="dna-grid">
+<div class="dna-item"><div class="dna-match">78%</div><div class="dna-pos">مهاجم</div></div>
+<div class="dna-item"><div class="dna-match">82%</div><div class="dna-pos">جناح</div></div>
+<div class="dna-item recommended"><div class="dna-match">86%</div><div class="dna-pos">وسط هجومي ⭐</div></div>
+</div>
+</div>
+
+<div class="scout">
+<div class="scout-title">🏆 تقييم الكشاف</div>
+<div class="scout-grid">
+<div class="scout-item"><div class="scout-label">AI</div><div class="scout-value">84</div></div>
+<div class="scout-item"><div class="scout-label">الكشاف</div><div class="scout-value">82</div></div>
+<div class="scout-item"><div class="scout-label">النتيجة</div><div class="scout-final">83</div></div>
+</div>
+</div>
+
+<button class="btn btn-secondary" onclick="reset()" style="margin-top:16px">← تسجيل لاعب آخر</button>
+</div>
+</main>
+
+<script>
+let chart = null;
+
+function show(id) {
+  document.getElementById('register').classList.add('hidden');
+  document.getElementById('analyzing').classList.add('hidden');
+  document.getElementById('results').classList.add('hidden');
+  document.getElementById(id).classList.remove('hidden');
 }
 
-function Badge({children,color=C.accent}){return <span style={{display:"inline-block",padding:"3px 10px",borderRadius:20,fontSize:11,fontWeight:600,background:`${color}22`,color,border:`1px solid ${color}44`,fontFamily:F}}>{children}</span>;}
-
-function StatBar({label,value,weight,delay=0}){
-  const[w,setW]=useState(0);const[vis,setVis]=useState(false);
-  useEffect(()=>{setTimeout(()=>{setVis(true);setW(value);},delay);},[]);
-  const color=value>=80?C.accent:value>=60?C.warning:C.danger;
-  return <div style={{marginBottom:12,opacity:vis?1:0,transform:vis?"none":"translateX(20px)",transition:"all 0.5s"}}>
-    <div style={{display:"flex",justifyContent:"space-between",marginBottom:4,alignItems:"center"}}>
-      <div style={{display:"flex",alignItems:"center",gap:6}}>
-        <span style={{color:C.textDim,fontSize:13,fontFamily:F}}>{label}</span>
-        {weight&&<span style={{fontSize:9,color:C.textDim,background:C.border,padding:"1px 6px",borderRadius:8,fontFamily:M}}>{weight}</span>}
-      </div>
-      <span style={{color:C.text,fontSize:14,fontWeight:700,fontFamily:M}}>{value}</span>
-    </div>
-    <div style={{height:6,background:C.border,borderRadius:3,overflow:"hidden"}}>
-      <div style={{height:"100%",width:`${w}%`,background:color,borderRadius:3,transition:"width 1.2s cubic-bezier(0.22,1,0.36,1)"}}/>
-    </div>
-  </div>;
+function startAnalysis() {
+  const name = document.getElementById('playerName').value;
+  const age = document.getElementById('playerAge').value;
+  const pos = document.getElementById('playerPos').value;
+  
+  if (!name || !age) { alert('الرجاء إدخال الاسم والعمر'); return; }
+  
+  show('analyzing');
+  
+  const status = document.getElementById('status');
+  const bar = document.getElementById('progress');
+  const steps = ['جاري تحميل AI...','تحليل الحركة...','كشف المهارات...','حساب الأداء...','إنشاء التقرير...'];
+  let i = 0, p = 0;
+  
+  const interval = setInterval(() => {
+    p += 3;
+    if (p > 100) p = 100;
+    bar.style.width = p + '%';
+    status.innerText = steps[Math.min(i, steps.length-1)];
+    if (p % 20 === 0) i++;
+    
+    if (p >= 100) {
+      clearInterval(interval);
+      setTimeout(() => {
+        const score = 70 + Math.floor(Math.random() * 25);
+        document.getElementById('resName').innerText = name;
+        document.getElementById('resPos').innerText = pos;
+        document.getElementById('resAge').innerText = age + ' سنة';
+        document.getElementById('resScore').innerText = score;
+        
+        const skills = [];
+        for (let i = 1; i <= 6; i++) {
+          const v = 70 + Math.floor(Math.random() * 25);
+          skills.push(v);
+          document.getElementById('s' + i).innerText = v;
+          document.getElementById('b' + i).style.width = v + '%';
+        }
+        
+        show('results');
+        drawChart(skills);
+      }, 500);
+    }
+  }, 80);
 }
 
-function App(){
-  const[page,setPage]=useState("home");
-  const[player,setPlayer]=useState(null);
-  const[data,setData]=useState(null);
-  return <div style={{background:C.bg,minHeight:"100vh",direction:"rtl",fontFamily:F}}>
-    <style>{`@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}@keyframes fadeUp{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:none}}@keyframes glow{0%,100%{box-shadow:0 0 20px ${C.accentGlow}}50%{box-shadow:0 0 50px rgba(0,230,118,0.3)}}*{box-sizing:border-box}`}</style>
-    {page==="home"&&<Landing onGo={setPage}/>}
-    {page==="upload"&&<Upload onBack={()=>setPage("home")} onGo={p=>{setPlayer(p);setPage("scan");}}/>}
-    {page==="scan"&&<Scan player={player} onDone={d=>{setData(d);setPage("report");}}/>}
-    {page==="report"&&<Report player={player} data={data} onReset={()=>{setPage("home");setData(null);setPlayer(null);}}/>}
-  </div>;
+function drawChart(skills) {
+  const ctx = document.getElementById('radarChart');
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['السرعة', 'التسديد', 'التمرير', 'المراوغة', 'الرؤية', 'التحكم'],
+      datasets: [{
+        label: 'المهارات',
+        data: skills,
+        backgroundColor: 'rgba(0,230,118,0.2)',
+        borderColor: '#00e676',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        r: {
+          min: 0, max: 100,
+          ticks: { display: false },
+          grid: { color: 'rgba(255,255,255,0.1)' },
+          angleLines: { color: 'rgba(255,255,255,0.1)' },
+          pointLabels: { color: '#6b7a90', font: { size: 11 } }
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
 }
 
-function Landing({onGo}){
-  return <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 20px",textAlign:"center",position:"relative"}}>
-    <div style={{position:"absolute",width:400,height:400,borderRadius:"50%",background:`radial-gradient(circle,${C.accentGlow},transparent 70%)`,filter:"blur(100px)",top:"-15%",right:"-5%",pointerEvents:"none"}}/>
-    <div style={{width:80,height:80,borderRadius:20,background:`linear-gradient(135deg,${C.accent},${C.accentDim})`,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px",animation:"glow 3s infinite",fontSize:36}}>⚡</div>
-    <h1 style={{fontFamily:F,fontSize:"clamp(36px,7vw,56px)",fontWeight:900,color:C.text,margin:"0 0 8px",letterSpacing:-1.5}}>SCOUT <span style={{color:C.accent}}>AI</span></h1>
-    <p style={{fontFamily:F,fontSize:16,color:C.textDim,marginBottom:32,maxWidth:400}}>ارفع بيانات اللاعب — احصل على تقرير احترافي + Sport DNA</p>
-    <div style={{padding:"8px 16px",borderRadius:8,background:`${C.info}10`,border:`1px solid ${C.info}20`,marginBottom:24}}>
-      <span style={{fontFamily:F,fontSize:12,color:C.info}}>💡 النسخة التجريبية — التحليل مبني على بيانات إحصائية</span>
-    </div>
-    <button onClick={()=>onGo("upload")} style={{padding:"16px 48px",borderRadius:14,border:"none",cursor:"pointer",background:`linear-gradient(135deg,${C.accent},${C.accentDim})`,color:C.bg,fontFamily:F,fontSize:18,fontWeight:800,boxShadow:`0 0 30px ${C.accentGlow}`}}>⚡ ابدأ التحليل</button>
-  </div>;
+function reset() {
+  document.getElementById('playerName').value = '';
+  document.getElementById('playerAge').value = '';
+  document.getElementById('progress').style.width = '0%';
+  show('register');
 }
-
-function Upload({onBack,onGo}){
-  const[form,setForm]=useState({name:"",age:"",city:CITIES[0],position:POSITIONS[0]});
-  const inp={width:"100%",padding:"12px 14px",borderRadius:10,border:`1px solid ${C.border}`,background:C.bg,color:C.text,fontFamily:F,fontSize:14,outline:"none",boxSizing:"border-box"};
-  return <div style={{minHeight:"100vh",padding:"40px 20px",maxWidth:540,margin:"0 auto"}}>
-    <button onClick={onBack} style={{background:"none",border:"none",color:C.accent,cursor:"pointer",fontFamily:F,fontSize:14,marginBottom:24}}>→ الرئيسية</button>
-    <h2 style={{fontFamily:F,fontSize:26,fontWeight:800,color:C.text,margin:"0 0 24px"}}>تحليل موهبة ⚡</h2>
-    <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:16,padding:24,marginBottom:20}}>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
-        <div style={{gridColumn:"1/-1"}}><label style={{fontFamily:F,fontSize:12,color:C.textDim,display:"block",marginBottom:6}}>اسم اللاعب</label><input value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="محمد الأحمد" style={inp}/></div>
-        <div><label style={{fontFamily:F,fontSize:12,color:C.textDim,display:"block",marginBottom:6}}>العمر</label><input type="number" value={form.age} onChange={e=>setForm({...form,age:e.target.value})} placeholder="17" style={inp}/></div>
-        <div><label style={{fontFamily:F,fontSize:12,color:C.textDim,display:"block",marginBottom:6}}>المدينة</label><select value={form.city} onChange={e=>setForm({...form,city:e.target.value})} style={inp}>{CITIES.map(c=><option key={c}>{c}</option>)}</select></div>
-        <div style={{gridColumn:"1/-1"}}><label style={{fontFamily:F,fontSize:12,color:C.textDim,display:"block",marginBottom:6}}>المركز</label><select value={form.position} onChange={e=>setForm({...form,position:e.target.value})} style={inp}>{POSITIONS.map(p=><option key={p}>{p}</option>)}</select></div>
-      </div>
-    </div>
-    <button onClick={()=>{if(form.name&&form.age)onGo({...form,age:+form.age});}} disabled={!form.name||!form.age} style={{width:"100%",padding:16,borderRadius:12,border:"none",background:form.name&&form.age?`linear-gradient(135deg,${C.accent},${C.accentDim})`:C.border,color:form.name&&form.age?C.bg:C.textDim,fontFamily:F,fontSize:16,fontWeight:700,cursor:form.name&&form.age?"pointer":"not-allowed",boxShadow:form.name&&form.age?`0 4px 20px ${C.accentGlow}`:"none"}}>⚡ حلل الحين</button>
-  </div>;
-}
-
-function Scan({player,onDone}){
-  const[p,setP]=useState(0);const[step,setStep]=useState(0);
-  const steps=["جاري تحميل البيانات…","تحليل المهارات…","مقارنة مع FIFA…","حساب Sport DNA…","إنشاء التقرير…"];
-  useEffect(()=>{
-    const iv=setInterval(()=>setP(v=>{if(v>=100){clearInterval(iv);setTimeout(()=>onDone(simAnalysis(player.name,player.age,player.position)),400);return 100;}return v+2;}),60);
-    return()=>clearInterval(iv);
-  },[]);
-  useEffect(()=>{setStep(Math.min(Math.floor(p/(100/steps.length)),steps.length-1));},[p]);
-  return <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:40,textAlign:"center"}}>
-    <div style={{width:100,height:100,borderRadius:"50%",border:`3px solid ${C.border}`,borderTopColor:C.accent,animation:p<100?"spin 1s linear infinite":"none",marginBottom:24}}/>
-    <h2 style={{fontFamily:F,fontSize:22,fontWeight:700,color:C.text,margin:"0 0 8px"}}>جاري تحليل <span style={{color:C.accent}}>{player.name}</span></h2>
-    <p style={{fontFamily:F,fontSize:14,color:C.accent,marginBottom:24,animation:p<100?"pulse 1.5s infinite":"none"}}>{steps[step]}</p>
-    <div style={{width:280,height:8,background:C.border,borderRadius:4,overflow:"hidden"}}>
-      <div style={{height:"100%",width:`${p}%`,background:`linear-gradient(90deg,${C.accent},${C.cyan})`,borderRadius:4,transition:"width 0.1s"}}/>
-    </div>
-  </div>;
-}
-
-function Report({player,data,onReset}){
-  const[reveal,setReveal]=useState(0);
-  const skills=data?.skills||{};const weighted=calcW(skills,player.position);const dna=calcDNA(skills);
-  const ageGroup=player.age<=14?"U-14":player.age<=17?"U-17":player.age<=19?"U-19":player.age<=21?"U-21":"Senior";
-  const benchScore=player.age<=14?52:player.age<=17?62:player.age<=19?70:player.age<=21?75:80;
-  const oc=weighted>=80?C.accent:weighted>=65?C.warning:C.danger;
-  const weights=PW[player.position]||{};
-  const radarData=SKK.map(k=>({attr:SK[k],value:skills[k]||50,fullMark:100}));
-
-  useEffect(()=>{[400,1200,2200,3200,4200].forEach((t,i)=>setTimeout(()=>setReveal(i+1),t));},[]);
-
-  return <div style={{minHeight:"100vh",padding:"40px 20px 80px",maxWidth:700,margin:"0 auto"}}>
-    <div style={{display:"flex",justifyContent:"space-between",marginBottom:20,animation:"fadeUp 0.5s"}}>
-      <button onClick={onReset} style={{background:"none",border:"none",color:C.accent,cursor:"pointer",fontFamily:F,fontSize:14}}>→ تحليل جديد</button>
-    </div>
-
-    {reveal>=1&&<div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:16,padding:24,marginBottom:20,animation:"fadeUp 0.6s"}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:16}}>
-        <div>
-          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8,flexWrap:"wrap"}}>
-            <h2 style={{fontFamily:F,fontSize:26,fontWeight:800,color:C.text,margin:0}}>{player.name}</h2>
-            <Badge color={oc}>{data?.rating||"B"}</Badge>
-          </div>
-          <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:12}}>
-            <Badge>{player.position}</Badge><Badge color={C.info}>{player.city}</Badge><Badge color={C.warning}>{player.age} سنة • {ageGroup}</Badge>
-          </div>
-          <div style={{padding:"10px 14px",borderRadius:10,background:`${oc}11`,border:`1px solid ${oc}33`}}>
-            <span style={{fontFamily:F,fontSize:14,color:oc,fontWeight:600}}>🎯 {data?.recommendation}</span>
-          </div>
-        </div>
-        <div style={{textAlign:"center"}}>
-          <div style={{width:80,height:80,borderRadius:"50%",border:`3px solid ${oc}`,display:"flex",alignItems:"center",justifyContent:"center",background:`${oc}11`}}>
-            <span style={{fontSize:30,fontWeight:800,color:oc,fontFamily:M}}>{weighted}</span>
-          </div>
-          <div style={{fontFamily:F,fontSize:11,color:C.textDim,marginTop:4}}>مرجّح</div>
-        </div>
-      </div>
-    </div>}
-
-    {reveal>=2&&<div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:16,padding:24,marginBottom:20,animation:"fadeUp 0.5s"}}>
-      <h3 style={{fontFamily:F,fontSize:16,fontWeight:700,color:C.text,margin:"0 0 16px"}}>خريطة المهارات</h3>
-      <ResponsiveContainer width="100%" height={260}>
-        <RadarChart data={radarData}>
-          <PolarGrid stroke={C.border}/>
-          <PolarAngleAxis dataKey="attr" tick={{fill:C.textDim,fontSize:11,fontFamily:F}}/>
-          <PolarRadiusAxis angle={90} domain={[0,100]} tick={false} axisLine={false}/>
-          <Radar dataKey="value" stroke={C.accent} fill={C.accent} fillOpacity={0.2} strokeWidth={2}/>
-        </RadarChart>
-      </ResponsiveContainer>
-    </div>}
-
-    {reveal>=3&&<div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:16,padding:24,marginBottom:20,animation:"fadeUp 0.5s"}}>
-      <h3 style={{fontFamily:F,fontSize:16,fontWeight:700,color:C.text,margin:"0 0 16px"}}>تفصيل المهارات — أوزان {player.position}</h3>
-      {SKK.map((k,i)=><StatBar key={k} label={SK[k]} value={skills[k]||50} weight={`${Math.round((weights[k]||.125)*100)}%`} delay={i*100}/>)}
-    </div>}
-
-    {reveal>=4&&<div style={{background:C.card,border:`1px solid ${oc=="#ffd700"?C.gold:C.gold}30`,borderRadius:16,padding:24,marginBottom:20,animation:"fadeUp 0.6s"}}>
-      <h3 style={{fontFamily:F,fontSize:18,fontWeight:800,color:C.gold,margin:"0 0 16px"}}>🧬 Sport DNA</h3>
-      <div style={{textAlign:"center",marginBottom:16}}>
-        <div style={{fontFamily:F,fontSize:13,color:C.textDim,marginBottom:6}}>المركز الأنسب:</div>
-        <div style={{fontFamily:F,fontSize:32,fontWeight:900,color:C.accent}}>{dna.best[0]}</div>
-        <div style={{fontFamily:M,fontSize:18,color:C.accent}}>{dna.best[1]}</div>
-      </div>
-      {dna.best[0]!==player.position&&<div style={{padding:"10px 16px",borderRadius:10,background:"rgba(255,215,64,0.08)",border:"1px solid rgba(255,215,64,0.15)",textAlign:"center",marginBottom:16}}>
-        <span style={{fontFamily:F,fontSize:14,color:C.gold}}>💡 مسجّل <strong>{player.position}</strong> لكن بياناتك تقول <strong style={{color:C.accent}}>{dna.best[0]}</strong> أنسب!</span>
-      </div>}
-      {dna.sorted.map(([pos,sc],i)=><div key={pos} style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
-        <div style={{width:24,height:24,borderRadius:"50%",background:i===0?C.accent:i===1?C.gold:C.border,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:800,color:i<2?C.bg:C.textDim,flexShrink:0}}>{i+1}</div>
-        <div style={{flex:1}}>
-          <div style={{display:"flex",justifyContent:"space-between",marginBottom:2}}>
-            <span style={{fontFamily:F,fontSize:12,color:i===0?C.accent:C.text}}>{pos}</span>
-            <span style={{fontFamily:M,fontSize:12,color:i===0?C.accent:C.textDim}}>{sc}</span>
-          </div>
-          <div style={{height:4,background:C.border,borderRadius:2,overflow:"hidden"}}>
-            <div style={{height:"100%",width:`${sc}%`,background:i===0?C.accent:i===1?C.gold:C.info,borderRadius:2}}/>
-          </div>
-        </div>
-      </div>)}
-    </div>}
-
-    {reveal>=5&&<div style={{textAlign:"center",animation:"fadeUp 0.5s"}}>
-      <button onClick={onReset} style={{padding:"16px 40px",borderRadius:14,border:"none",cursor:"pointer",background:`linear-gradient(135deg,${C.accent},${C.accentDim})`,color:C.bg,fontFamily:F,fontSize:16,fontWeight:800,boxShadow:`0 0 30px ${C.accentGlow}`}}>📸 حلل لاعب آخر</button>
-    </div>}
-  </div>;
-}
-
-ReactDOM.render(<App/>, document.getElementById('root'));
 </script>
 </body>
 </html>
