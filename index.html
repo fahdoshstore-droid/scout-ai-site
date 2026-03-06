@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SCOUT AI | Global Talent Discovery Platform</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto Kufi Arabic, Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -24,7 +24,7 @@
   --blue: #4f8cff;
   --purple: #a855f7;
 }
-body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+body { font-family: 'Noto Kufi Arabic, Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
 .bg-animation {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -357,7 +357,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 <div class="card"><div class="feature-icon">🧬</div><div class="feature-title">Sport DNA</div><div class="feature-desc">Our algorithm determines the optimal position based on player's unique skill profile.</div></div>
 <div class="card"><div class="feature-icon">🏥</div><div class="feature-title">Injury Prediction</div><div class="feature-desc">Predict injury risk based on training load, history, and physical attributes.</div></div>
 <div class="card"><div class="feature-icon">🧠</div><div class="feature-title">Psychological Assessment</div><div class="feature-desc">Evaluate mental strength, pressure handling, leadership, and focus abilities.</div></div>
-<div class="card"><div class="feature-icon">📊</div><div class="feature-title">International Benchmarks</div><div class="feature-desc">Compare players against FIFA standards and top leagues worldwide.</div></div>
+<div class="card"><div class="feature-icon">📊</div><div class="feature-title">Noto Kufi Arabic, International Benchmarks</div><div class="feature-desc">Compare players against FIFA standards and top leagues worldwide.</div></div>
 <div class="card"><div class="feature-icon">🤝</div><div class="feature-title">Club Connect</div><div class="feature-desc">Direct platform for clubs to discover talent and manage player offers.</div></div>
 </div>
 </div>
@@ -436,7 +436,7 @@ function startAnalysis() {
   ];
   let i = 0, progress = 0;
   
-  const interval = setInterval(() => {
+  const interval = setNoto Kufi Arabic, Interval(() => {
     progress += 3;
     if (progress > 100) progress = 100;
     bar.style.width = progress + '%';
@@ -444,7 +444,7 @@ function startAnalysis() {
     if (progress % 20 === 0) i++;
     
     if (progress >= 100) {
-      clearInterval(interval);
+      clearNoto Kufi Arabic, Interval(interval);
       setTimeout(() => {
         demoTab('results');
         generateChart();
