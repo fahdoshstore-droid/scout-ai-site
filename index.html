@@ -3,208 +3,214 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SCOUT AI - اكتشف موهبتك</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Noto Kufi Arabic',sans-serif;background:#060b14;color:#eef2f7;min-height:100vh}
-.nav{position:fixed;top:0;left:0;right:0;background:rgba(6,11,20,0.95);padding:16px 40px;display:flex;justify-content:space-between;border-bottom:1px solid #1a2438;z-index:100}
-.logo{display:flex;align-items:center;gap:12px;font-weight:800;font-size:22px}
-.logo-icon{width:40px;height:40px;background:linear-gradient(135deg,#00e676,#00c853);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px}
-.logo span{color:#00e676}
-.main{margin-top:80px;padding:20px;max-width:600px;margin-left:auto;margin-right:auto}
-.screen{display:none;padding:20px}
-.screen.active{display:block}
-.card{background:#0f1729;border:1px solid #1a2438;border-radius:16px;padding:24px;margin-bottom:20px}
-.btn{padding:14px 28px;border-radius:12px;border:none;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;width:100%}
-.btn-primary{background:linear-gradient(135deg,#00e676,#00c853);color:#060b14}
-.btn-secondary{background:#0f1729;color:#eef2f7;border:1px solid #1a2438}
-.form-input,.form-select{width:100%;padding:12px;border-radius:10px;border:1px solid #1a2438;background:#060b14;color:#eef2f7;font-family:inherit;margin-bottom:12px}
-.hero{text-align:center;padding:40px 20px}
-.hero h1{font-size:42px;font-weight:900;margin-bottom:12px}
-.hero h1 span{color:#00e676}
-.stats{display:flex;justify-content:center;gap:30px;margin-top:30px}
-.stat-num{font-size:28px;font-weight:800;color:#00e676}
-.stat-label{font-size:12px;color:#6b7a90}
-.badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;background:rgba(0,230,118,0.15);color:#00e676;margin-left:6px}
-.score-circle{width:80px;height:80px;border-radius:50%;border:3px solid #00e676;display:flex;align-items:center;justify-content:center;background:rgba(0,230,118,0.15)}
-.score-num2{font-size:28px;font-weight:900;color:#00e676}
-.skill{display:flex;justify-content:space-between;margin-bottom:8px;align-items:center}
-.skill-name{color:#6b7a90;font-size:14px}
-.skill-value{color:#00e676;font-weight:700}
-.skill-bar{height:6px;background:#1a2438;border-radius:3px;overflow:hidden;margin-bottom:16px}
-.skill-fill{height:100%;background:#00e676}
-.dna-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
-.dna-item{background:#060b14;border:2px solid #1a2438;border-radius:10px;padding:12px;text-align:center}
-.dna-item.recommended{border-color:#ffd700;background:rgba(255,215,0,0.1)}
-.dna-match{font-size:20px;font-weight:900}
-.dna-item.recommended .dna-match{color:#ffd700}
-.dna-pos{font-size:11px;color:#6b7a90}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.tabs{display:flex;gap:8px;margin-bottom:16px}
-.tab{flex:1;padding:12px;border-radius:8px;border:none;background:#060b14;color:#6b7a90;font-weight:600;cursor:pointer}
-.tab.active{background:#00e676;color:#060b14}
-.nav-btn{padding:10px 16px;border-radius:8px;border:none;background:transparent;color:#6b7a90;font-weight:600;cursor:pointer}
-.nav-btn.active{background:#00e676;color:#060b14}
-@media(max-width:600px){.nav{flex-direction:column;gap:10px}.main{padding:10px}}
-</style>
+<title>SCOUT AI — اكتشف المواهب بالذكاء الاصطناعي</title>
+<meta name="description" content="منصة ذكاء اصطناعي لاكتشاف وتقييم مواهب كرة القدم الناشئين في السعودية">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+<!-- Nav -->
 <nav class="nav">
-<div class="logo"><div class="logo-icon">⚡</div>SCOUT <span>AI</span></div>
-<div style="display:flex;gap:8px">
-<button class="nav-btn active" onclick="show('home')">الرئيسية</button>
-<button class="nav-btn" onclick="show('register')">تسجيل</button>
-<button class="nav-btn" onclick="show('dashboard')">الكشافة</button>
-</div>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">⚡ SCOUT <span>AI</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="active">الرئيسية</a>
+      <a href="pages/demo.html">الديمو</a>
+      <a href="pages/academy.html">للأكاديميات</a>
+      <a href="pages/about.html">عن المشروع</a>
+    </div>
+    <a href="pages/demo.html" class="nav-cta">جرّب الحين ⚡</a>
+  </div>
 </nav>
 
-<main class="main">
-<!-- HOME -->
-<section id="home" class="screen active">
-<div class="hero">
-<h1>اكتشف <span>موهبتك</span></h1>
-<p>منصة ذكاء اصطناعي لاكتشاف المواهب</p>
-<button class="btn btn-primary" onclick="show('register')" style="width:auto;padding:14px 40px">🚀 جرب الآن</button>
-<div class="stats">
-<div><div class="stat-num">50K+</div><div class="stat-label">لاعب</div></div>
-<div><div class="stat-num">150+</div><div class="stat-label">نادي</div></div>
-<div><div class="stat-num">96%</div><div class="stat-label">دقة</div></div>
-</div>
-</div>
+<!-- Hero -->
+<section class="hero">
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🏟️ هاكاثون الابتكار الرياضي 2026</div>
+    <div class="logo-icon">⚡</div>
+    <h1>SCOUT <span class="accent">AI</span></h1>
+    <p class="hero-sub">اكتشف المواهب الرياضية بالذكاء الاصطناعي</p>
+    <p class="hero-desc">منصة تجمع الأكاديميات واللاعبين والكشافين — كل واحد بحسابه يشوف اللي يخصه</p>
+    <div class="hero-btns">
+      <a href="pages/demo.html" class="btn btn-primary">📸 حلل موهبتك الحين</a>
+      <a href="pages/academy.html" class="btn btn-outline">🏟️ للأكاديميات</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">30M+</span><span class="stat-label">شاب سعودي</span></div>
+      <div class="stat"><span class="stat-num">85%</span><span class="stat-label">مواهب لا تُكتشف</span></div>
+      <div class="stat"><span class="stat-num">ZERO</span><span class="stat-label">منافس محلي</span></div>
+    </div>
+  </div>
 </section>
 
-<!-- REGISTER -->
-<section id="register" class="screen">
-<div class="card">
-<h2 style="margin-bottom:20px;text-align:center">تسجيل لاعب جديد</h2>
-<input type="text" class="form-input" id="playerName" placeholder="اسم اللاعب">
-<div class="grid">
-<input type="number" class="form-input" id="playerAge" placeholder="العمر">
-<select class="form-select" id="playerCity"><option>الرياض</option><option>جدة</option><option>الدمام</option></select>
-</div>
-<select class="form-select" id="playerPosition"><option>مهاجم</option><option>جناح</option><option>وسط هجومي</option><option>وسط دفاعي</option><option>مدافع</option></select>
-<button class="btn btn-primary" onclick="startAnalysis()" style="margin-top:12px">🤖 ابدأ التحليل</button>
-</div>
+<!-- Problem -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">😤 المشكلة</h2>
+    <p class="section-desc">85% من المواهب الرياضية في السعودية لا تُكتشف</p>
+    <div class="grid-4">
+      <div class="problem-card">
+        <span class="problem-icon">🎲</span>
+        <h3>اكتشاف عشوائي</h3>
+        <p>يعتمد على الحظ والواسطة — مو على بيانات</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon">📋</span>
+        <h3>تقييم شخصي</h3>
+        <p>كل مدرب يقيّم بطريقته — لا معايير موحدة</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon">📍</span>
+        <h3>تغطية محدودة</h3>
+        <p>الكشافون بالمدن الكبرى فقط — الباقي مهمل</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon">💸</span>
+        <h3>استثمار ضائع</h3>
+        <p>ملايين على أجانب والمواهب المحلية مجهولة</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- DASHBOARD -->
-<section id="dashboard" class="screen">
-<h2 style="margin-bottom:16px">الكشافة</h2>
-<div id="playersList"></div>
+<!-- Solution -->
+<section class="section section-dark">
+  <div class="container">
+    <h2 class="section-title">✅ الحل — نظام هجين فريد</h2>
+    <p class="section-desc">AI يحلل + الكشاف يقيّم + النظام يدمج = تقرير موثوق</p>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-icon">📸</div>
+        <h4>ارفع صورة</h4>
+        <p>صورة أثناء اللعب أو التمرين</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-icon">🧠</div>
+        <h4>AI يحلل</h4>
+        <p>Anthropic Vision API حقيقي</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-icon">📋</div>
+        <h4>الكشاف يقيّم</h4>
+        <p>تقييم مهني مهيكل</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-icon">📊</div>
+        <h4>تقرير احترافي</h4>
+        <p>Radar + Sport DNA + توصيات</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- RESULTS -->
-<section id="results" class="screen">
-<div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-<div><div id="resName" style="font-size:24px;font-weight:800">أحمد</div><div><span id="resPos" class="badge">مهاجم</span><span id="resAge" class="badge" style="background:#060b14;color:#6b7a90">17 سنة</span></div></div>
-<div class="score-circle"><div id="resScore" class="score-num2">84</div></div>
-</div>
-<div class="tabs"><button class="tab active" onclick="switchTab('skills')">المهارات</button><button class="tab" onclick="switchTab('compare')">المقارنة</button></div>
-<div id="skillsTab">
-<div class="skill"><span class="skill-name">⚡ السرعة</span><span class="skill-value" id="s1">87</span></div>
-<div class="skill-bar"><div class="skill-fill" id="b1" style="width:87%"></div></div>
-<div class="skill"><span class="skill-name">🎯 التسديد</span><span class="skill-value" id="s2">81</span></div>
-<div class="skill-bar"><div class="skill-fill" id="b2" style="width:81%"></div></div>
-<div class="skill"><span class="skill-name">👟 التمرير</span><span class="skill-value" id="s3">82</span></div>
-<div class="skill-bar"><div class="skill-fill" id="b3" style="width:82%"></div></div>
-<div class="skill"><span class="skill-name">🏃 المراوغة</span><span class="skill-value" id="s4">84</span></div>
-<div class="skill-bar"><div class="skill-fill" id="b4" style="width:84%"></div></div>
-<div class="skill"><span class="skill-name">👁️ الرؤية</span><span class="skill-value" id="s5">79</span></div>
-<div class="skill-bar"><div class="skill-fill" id="b5" style="width:79%"></div></div>
-<div class="skill"><span class="skill-name">🎮 التحكم</span><span class="skill-value" id="s6">86</span></div>
-<div class="skill-bar"><div class="skill-fill" id="b6" style="width:86%"></div></div>
-</div>
-<div id="compareTab" style="display:none">
-<div style="background:#060b14;padding:16px;border-radius:10px">
-<div style="margin-bottom:8px"><span style="color:#6b7a90">معيار FIFA U-19</span><span style="float:left;font-weight:700">70</span></div>
-<div class="skill-bar"><div class="skill-fill" style="width:70%;background:#6b7a90"></div></div>
-<div style="margin-bottom:8px"><span style="color:#00e676">أداء اللاعب</span><span style="float:left;font-weight:700;color:#00e676" id="resCompare">84</span></div>
-<div class="skill-bar"><div class="skill-fill" id="barCompare" style="width:84%"></div></div>
-<div style="text-align:center;margin-top:12px;color:#ffd700;font-weight:700">+14 فوق المعيار ⭐</div>
-</div>
-</div>
-<div style="margin-top:20px" class="dna-grid">
-<div class="dna-item"><div class="dna-match">78%</div><div class="dna-pos">مهاجم</div></div>
-<div class="dna-item"><div class="dna-match">82%</div><div class="dna-pos">جناح</div></div>
-<div class="dna-item recommended"><div class="dna-match">86%</div><div class="dna-pos">وسط هجومي ⭐</div></div>
-</div>
-<div style="background:rgba(0,230,118,0.15);border:1px solid #00e676;border-radius:12px;padding:16px;margin-top:20px;text-align:center">
-<div style="color:#00e676;font-weight:700;margin-bottom:12px">🏆 تقييم الكشاف</div>
-<div class="grid">
-<div><div style="color:#6b7a90;font-size:12px">AI</div><div style="font-size:24px;font-weight:800;color:#00e676" id="aiScore">84</div></div>
-<div><div style="color:#6b7a90;font-size:12px">الكشاف</div><div style="font-size:24px;font-weight:800;color:#00e676">82</div></div>
-<div><div style="color:#6b7a90;font-size:12px">النتيجة</div><div style="font-size:24px;font-weight:800;color:#ffd700">83</div></div>
-</div>
-</div>
-<button class="btn btn-secondary" onclick="show('home')" style="margin-top:20px">← الرئيسية</button>
-</div>
+<!-- Features -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">🔥 وش يميّز SCOUT AI</h2>
+    <div class="grid-3">
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(0,230,118,0.1)">⚖️</div>
+        <h3>Scoring Engine حقيقي</h3>
+        <p>أوزان مختلفة لكل مركز — المهاجم التسديد 28% والمدافع الدفاع 28%. مو أرقام عشوائية.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(255,215,64,0.1)">🧬</div>
+        <h3>Sport DNA</h3>
+        <p>يكتشف مركزك الحقيقي: "أنت مسجّل مهاجم لكن بياناتك تقول جناح أنسب!"</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(0,188,212,0.1)">🔄</div>
+        <h3>دمج ذكي</h3>
+        <p>AI بوزن 40% + كشاف بوزن 60% = نتيجة أدق من أي طريقة لحالها.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(255,82,82,0.1)">📊</div>
+        <h3>معايير FIFA</h3>
+        <p>مقارنة مع المتوسط الدولي لكل فئة عمرية: U-14, U-17, U-19, U-21, Senior.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(179,136,255,0.1)">⭐</div>
+        <h3>لاعب مشابه</h3>
+        <p>الـ AI يقولك أسلوبك يشبه أي لاعب محترف — مع السبب.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(255,171,64,0.1)">💪</div>
+        <h3>توصيات تدريبية</h3>
+        <p>3 نصائح تدريبية مخصصة من AI بناءً على نقاط ضعفك.</p>
+      </div>
+    </div>
+  </div>
 </section>
-</main>
 
-<script>
-const players=[
-{id:1,name:"عبدالله الشمري",age:17,city:"الرياض",pos:"مهاجم",score:84},
-{id:2,name:"فيصل القحطاني",age:16,city:"جدة",pos:"جناح",score:81},
-{id:3,name:"محمد الدوسري",age:19,city:"الدمام",pos:"وسط دفاعي",score:79},
-{id:4,name:"خالد العتيبي",age:15,city:"مكة",pos:"حارس مرمي",score:77},
-{id:5,name:"سلطان الحربي",age:18,city:"الخبر",pos:"وسط هجومي",score:86},
-];
+<!-- For Who -->
+<section class="section section-dark">
+  <div class="container">
+    <h2 class="section-title">👥 لمين SCOUT AI؟</h2>
+    <div class="grid-3">
+      <div class="who-card">
+        <span class="who-emoji">⚽</span>
+        <h3>اللاعب</h3>
+        <p>ارفع صورتك واكتشف مستواك الحقيقي + المركز الأنسب لك</p>
+        <a href="pages/demo.html" class="btn btn-sm">جرّب الحين</a>
+      </div>
+      <div class="who-card">
+        <span class="who-emoji">🏟️</span>
+        <h3>الأكاديمية</h3>
+        <p>تقارير شهرية لكل لاعب تعرضها للأهل + لاعبينك يبانون للكشافين</p>
+        <a href="pages/academy.html" class="btn btn-sm btn-gold">اعرف أكثر</a>
+      </div>
+      <div class="who-card">
+        <span class="who-emoji">🔍</span>
+        <h3>الكشاف</h3>
+        <p>تصفّح مواهب من كل السعودية + قيّم بفورم مهني + تواصل مباشر</p>
+        <a href="pages/demo.html" class="btn btn-sm btn-cyan">لوحة الكشاف</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-function show(id){
-document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-document.querySelectorAll('.nav-btn').forEach((b,i)=>b.classList.toggle('active',i==={home:0,register:1,dashboard:2}[id]||false));
-if(id==='dashboard')renderDashboard();
-}
+<!-- CTA -->
+<section class="section cta-section">
+  <div class="container" style="text-align:center">
+    <div class="logo-icon" style="margin-bottom:20px">⚡</div>
+    <h2 style="font-size:clamp(28px,5vw,42px); margin-bottom:8px">جاهز تكتشف موهبتك؟</h2>
+    <p style="color:var(--dim); font-size:16px; margin-bottom:32px">التحليل يشتغل حقيقي — جربه بنفسك</p>
+    <a href="pages/demo.html" class="btn btn-primary btn-lg">📸 ابدأ التحليل المجاني</a>
+  </div>
+</section>
 
-function renderDashboard(){
-const list=document.getElementById('playersList');
-list.innerHTML=players.map(p=>`<div class="card" style="cursor:pointer" onclick="viewPlayer(${p.id})"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:700">${p.name}</div><div style="font-size:12px;color:#6b7a90">${p.age} سنة • ${p.city}</div></div><div class="score-circle" style="width:50px;height:50px"><div style="font-size:18px;font-weight:800;color:#00e676">${p.score}</div></div></div><div style="margin-top:8px"><span class="badge">${p.pos}</span></div></div>`).join('');
-}
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">⚡ SCOUT <span>AI</span></div>
+        <p>اكتشف المواهب — بالذكاء الاصطناعي</p>
+      </div>
+      <div class="footer-links">
+        <a href="pages/demo.html">الديمو</a>
+        <a href="pages/academy.html">للأكاديميات</a>
+        <a href="pages/about.html">عن المشروع</a>
+      </div>
+      <div>
+        <p>هاكاثون الابتكار الرياضي 2026</p>
+        <p>الرياض | أبريل 20-22</p>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 SCOUT AI — جميع الحقوق محفوظة</div>
+  </div>
+</footer>
 
-function viewPlayer(id){
-const p=players.find(x=>x.id===id);
-if(!p)return;
-document.getElementById('resName').innerText=p.name;
-document.getElementById('resPos').innerText=p.pos;
-document.getElementById('resAge').innerText=p.age+' سنة';
-document.getElementById('resScore').innerText=p.score;
-document.getElementById('resCompare').innerText=p.score;
-document.getElementById('barCompare').style.width=p.score+'%';
-document.getElementById('aiScore').innerText=p.score;
-const skills=[70+Math.floor(Math.random()*25),70+Math.floor(Math.random()*25),70+Math.floor(Math.random()*25),70+Math.floor(Math.random()*25),70+Math.floor(Math.random()*25),70+Math.floor(Math.random()*25)];
-for(let i=1;i<=6;i++){document.getElementById('s'+i).innerText=skills[i-1];document.getElementById('b'+i).style.width=skills[i-1]+'%';}
-show('results');
-}
-
-function switchTab(tab){
-document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-event.target.classList.add('active');
-document.getElementById('skillsTab').style.display=tab==='skills'?'block':'none';
-document.getElementById('compareTab').style.display=tab==='compare'?'block':'none';
-}
-
-function startAnalysis(){
-const name=document.getElementById('playerName').value;
-const age=document.getElementById('playerAge').value;
-const city=document.getElementById('playerCity').value;
-const pos=document.getElementById('playerPosition').value;
-if(!name||!age){alert('الرجاء إدخال الاسم والعمر');return;}
-const score=70+Math.floor(Math.random()*25);
-document.getElementById('resName').innerText=name;
-document.getElementById('resPos').innerText=pos;
-document.getElementById('resAge').innerText=age+' سنة';
-document.getElementById('resScore').innerText=score;
-document.getElementById('resCompare').innerText=score;
-document.getElementById('barCompare').style.width=score+'%';
-document.getElementById('aiScore').innerText=score;
-const skills=[70+Math.floor(Math.random()*25),70+Math.floor(Math.random()*25),70+Math.floor(Math.random()*25),70+Math.floor(Math.random()*25),70+Math.floor(Math.random()*25),70+Math.floor(Math.random()*25)];
-for(let i=1;i<=6;i++){document.getElementById('s'+i).innerText=skills[i-1];document.getElementById('b'+i).style.width=skills[i-1]+'%';}
-show('results');
-}
-</script>
 </body>
 </html>
