@@ -35,7 +35,8 @@
         .tab.active { background: var(--accent); color: var(--bg); }
         
         /* Grid */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .player-avatar { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--cyan)); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; margin: 0 auto 12px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         
         /* Video Upload */
         .upload-zone { border: 2px dashed var(--border); border-radius: 16px; padding: 40px; text-align: center; cursor: pointer; transition: 0.3s; }
@@ -89,19 +90,23 @@
                 <button class="btn btn-primary" onclick="showPage('analyze')">ابدأ الآن</button>
             </div>
             <div class="grid">
-                <div class="card">
+                <div class="card" style="text-align:center">
+                    <div class="player-avatar">${p.name.charAt(0)}</div>
                     <h3>🎥 فيديو من جهازك</h3>
                     <p style="color:var(--text-dim)">ارفع فيديو مباشر للتحليل</p>
                 </div>
-                <div class="card">
+                <div class="card" style="text-align:center">
+                    <div class="player-avatar">${p.name.charAt(0)}</div>
                     <h3>📊 مقارنة</h3>
                     <p style="color:var(--text-dim)">قارن بين لاعبين</p>
                 </div>
-                <div class="card">
+                <div class="card" style="text-align:center">
+                    <div class="player-avatar">${p.name.charAt(0)}</div>
                     <h3>📈 تطور</h3>
                     <p style="color:var(--text-dim">تتبع تطور اللاعب</p>
                 </div>
-                <div class="card">
+                <div class="card" style="text-align:center">
+                    <div class="player-avatar">${p.name.charAt(0)}</div>
                     <h3>👥 فريق</h3>
                     <p style="color:var(--text-dim)">إدارة الأكاديمية</p>
                 </div>
@@ -116,7 +121,8 @@
                 <div class="tab" onclick="setAnalyzeMode('manual')">✏️ يدوي</div>
             </div>
             
-            <div class="card">
+            <div class="card" style="text-align:center">
+                    <div class="player-avatar">${p.name.charAt(0)}</div>
                 <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
                     <input type="file" id="fileInput" accept="video/*,image/*" style="display:none" onchange="handleFile(this.files[0])">
                     <div style="font-size:48px;margin-bottom:10px">📤</div>
@@ -128,7 +134,8 @@
                 </div>
             </div>
             
-            <div class="card">
+            <div class="card" style="text-align:center">
+                    <div class="player-avatar">${p.name.charAt(0)}</div>
                 <h3>معلومات اللاعب</h3>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
                     <input type="text" id="playerName" placeholder="اسم اللاعب">
@@ -152,7 +159,8 @@
             </div>
             
             <div id="analysisResult" class="hidden">
-                <div class="card">
+                <div class="card" style="text-align:center">
+                    <div class="player-avatar">${p.name.charAt(0)}</div>
                     <h3>📊 نتيجة التحليل</h3>
                     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:15px;text-align:center">
                         <div class="stat-box"><div class="stat-num" id="overallScore">85</div><div style="font-size:12px;color:var(--text-dim)">التقييم</div></div>
@@ -163,13 +171,15 @@
                     <canvas id="radarChart" style="margin-top:20px"></canvas>
                 </div>
                 
-                <div class="card">
+                <div class="card" style="text-align:center">
+                    <div class="player-avatar">${p.name.charAt(0)}</div>
                     <h3>🧬 Sport DNA</h3>
                     <p id="bestPosition" style="font-size:24px;font-weight:800;color:var(--accent);text-align:center">مهاجم</p>
                     <div id="dnaBars"></div>
                 </div>
                 
-                <div class="card">
+                <div class="card" style="text-align:center">
+                    <div class="player-avatar">${p.name.charAt(0)}</div>
                     <h3>💪 التوصيات</h3>
                     <div id="recommendations"></div>
                 </div>
@@ -195,7 +205,8 @@
                 </div>
             </div>
             <div class="vs">VS</div>
-            <div class="card">
+            <div class="card" style="text-align:center">
+                    <div class="player-avatar">${p.name.charAt(0)}</div>
                 <h3>📊 مقارنة المهارات</h3>
                 <canvas id="compareChart"></canvas>
             </div>
@@ -203,14 +214,16 @@
 
         <!-- HISTORY PAGE -->
         <div id="history" class="hidden">
-            <div class="card">
+            <div class="card" style="text-align:center">
+                    <div class="player-avatar">${p.name.charAt(0)}</div>
                 <h3>📈 تاريخ التحليلات</h3>
                 <select id="historyPlayer" onchange="loadHistory()">
                     <option value="">اختر لاعب</option>
                 </select>
             </div>
             <div id="historyTimeline"></div>
-            <div class="card">
+            <div class="card" style="text-align:center">
+                    <div class="player-avatar">${p.name.charAt(0)}</div>
                 <h3>تطور المهارات</h3>
                 <canvas id="progressChart"></canvas>
             </div>
@@ -218,7 +231,8 @@
 
         <!-- TEAM PAGE -->
         <div id="team" class="hidden">
-            <div class="card">
+            <div class="card" style="text-align:center">
+                    <div class="player-avatar">${p.name.charAt(0)}</div>
                 <h3>👥 إدارة الفريق</h3>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
                     <button class="btn btn-primary" onclick="showModal('addPlayer')">➕ إضافة لاعب</button>
@@ -414,7 +428,8 @@
 
         function renderTeam() {
             document.getElementById('teamPlayers').innerHTML = players.map(p => `
-                <div class="card">
+                <div class="card" style="text-align:center">
+                    <div class="player-avatar">${p.name.charAt(0)}</div>
                     <h4>${p.name}</h4>
                     <p style="color:var(--text-dim)">${p.age} سنة | ${p.position}</p>
                     <span class="badge badge-gold">${p.scores.overall}</span>
