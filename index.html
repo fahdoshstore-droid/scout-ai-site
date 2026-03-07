@@ -1,339 +1,216 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCOUT AI — اكتشف المواهب</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        :root { --bg: #0a0f1a; --card: #111827; --accent: #00e676; --text: #f0f4f8; --text-dim: #8892a4; --border: #1e2a3a; --danger: #ff5252; --gold: #ffd700; --cyan: #00bcd4; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: var(--text); font-family: 'Noto Kufi Arabic', sans-serif; min-height: 100vh; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .hidden { display: none !important; }
-        
-        /* Navigation */
-        .nav { display: flex; gap: 10px; padding: 20px 0; flex-wrap: wrap; }
-        .nav-btn { padding: 10px 20px; border: none; border-radius: 10px; background: var(--card); color: var(--text); cursor: pointer; font-family: inherit; font-weight: 600; transition: 0.3s; }
-        .nav-btn.active { background: var(--accent); color: var(--bg); }
-        
-        /* Cards */
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
-        
-        /* Forms */
-        input, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); margin-bottom: 10px; font-family: inherit; }
-        
-        /* Buttons */
-        .btn { padding: 12px 24px; border: none; border-radius: 10px; font-family: inherit; font-weight: 700; cursor: pointer; transition: 0.3s; }
-        .btn-primary { background: var(--accent); color: var(--bg); }
-        .btn-secondary { background: var(--card); color: var(--text); border: 1px solid var(--border); }
-        
-        /* Tabs */
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab { padding: 10px 20px; border-radius: 10px; background: var(--card); cursor: pointer; }
-        .tab.active { background: var(--accent); color: var(--bg); }
-        
-        /* Grid */
-        .player-avatar { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--cyan)); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; margin: 0 auto 12px; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        
-        /* Video Upload */
-        .upload-zone { border: 2px dashed var(--border); border-radius: 16px; padding: 40px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .upload-zone:hover { border-color: var(--accent); }
-        
-        /* Comparison */
-        .compare-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .player-box { background: var(--card); border: 2px solid var(--border); border-radius: 16px; padding: 20px; }
-        .vs { display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 800; color: var(--gold); }
-        
-        /* Timeline */
-        .timeline-item { display: flex; gap: 15px; padding: 15px; border-right: 2px solid var(--accent); margin-right: 10px; position: relative; }
-        .timeline-dot { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; position: absolute; right: -7px; }
-        
-        /* Stats */
-        .stat-box { text-align: center; padding: 15px; }
-        .stat-num { font-size: 28px; font-weight: 800; color: var(--accent); }
-        
-        /* Modal */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-        .modal-content { background: var(--card); border-radius: 20px; padding: 30px; max-width: 500px; width: 90%; }
-        
-        /* Progress bar */
-        .progress { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--accent); transition: width 0.3s; }
-        
-        /* Badge */
-        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-        .badge-gold { background: rgba(255,215,0,0.2); color: var(--gold); }
-        
-        @media (max-width: 768px) { .compare-container { grid-template-columns: 1fr; } .vs { padding: 20px 0; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCOUT AI — اكتشف المواهب بالذكاء الاصطناعي</title>
+<meta name="description" content="منصة ذكاء اصطناعي لاكتشاف وتقييم مواهب كرة القدم الناشئين في السعودية">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container">
-        <h1 style="text-align:center;margin:20px 0">⚡ SCOUT AI</h1>
-        
-        <div class="nav">
-            <button class="nav-btn active" onclick="showPage('home')">🏠 الرئيسية</button>
-            <button class="nav-btn" onclick="showPage('analyze')">🔬 تحليل</button>
-            <button class="nav-btn" onclick="showPage('compare')">📊 مقارنة</button>
-            <button class="nav-btn" onclick="showPage('history')">📈 التطور</button>
-            <button class="nav-btn" onclick="showPage('team')">👥 الفريق</button>
-        </div>
 
-        <!-- HOME PAGE -->
-        <div id="home">
-            <div class="card" style="text-align:center">
-                <h2>🎯 اكتشف موهبتك</h2>
-                <p style="color:var(--text-dim);margin:10px 0">ارفع فيديو أو صورة واحصل على تحليل احترافي</p>
-                <button class="btn btn-primary" onclick="showPage('analyze')">ابدأ الآن</button>
-            </div>
-            <div class="grid">
-                <div class="card" style="text-align:center">
-                <h3>👥 إدارة الفريق</h3>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-                    <button class="btn btn-primary" onclick="showModal('addPlayer')">➕ إضافة لاعب</button>
-                    <button class="btn btn-secondary" onclick="showModal('bulkUpload')">📤 رفع جماعي</button>
-                </div>
-            </div>
-            <div class="grid" id="teamPlayers"></div>
-        </div>
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">⚡ SCOUT <span>AI</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="active">الرئيسية</a>
+      <a href="pages/demo.html">الديمو</a>
+      <a href="pages/academy.html">للأكاديميات</a>
+      <a href="pages/about.html">عن المشروع</a>
     </div>
+    <a href="pages/demo.html" class="nav-cta">جرّب الحين ⚡</a>
+  </div>
+</nav>
 
-    <!-- Modal -->
-    <div id="modal" class="modal hidden" onclick="closeModal()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <h3 id="modalTitle" style="margin-bottom:20px"></h3>
-            <div id="modalBody"></div>
-        </div>
+<!-- Hero -->
+<section class="hero">
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🏟️ هاكاثون الابتكار الرياضي 2026</div>
+    <div class="logo-icon">⚡</div>
+    <h1>SCOUT <span class="accent">AI</span></h1>
+    <p class="hero-sub">اكتشف المواهب الرياضية بالذكاء الاصطناعي</p>
+    <p class="hero-desc">منصة تجمع الأكاديميات واللاعبين والكشافين — كل واحد بحسابه يشوف اللي يخصه</p>
+    <div class="hero-btns">
+      <a href="pages/demo.html" class="btn btn-primary">📸 حلل موهبتك الحين</a>
+      <a href="pages/academy.html" class="btn btn-outline">🏟️ للأكاديميات</a>
     </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">30M+</span><span class="stat-label">شاب سعودي</span></div>
+      <div class="stat"><span class="stat-num">85%</span><span class="stat-label">مواهب لا تُكتشف</span></div>
+      <div class="stat"><span class="stat-num">ZERO</span><span class="stat-label">منافس محلي</span></div>
+    </div>
+  </div>
+</section>
 
-    <script>
-        // Data Storage
-        let players = JSON.parse(localStorage.getItem('scoutPlayers') || '[]');
-        let analysisHistory = JSON.parse(localStorage.getItem('scoutHistory') || '[]');
-        let currentAnalyzeMode = 'video';
-        let currentFile = null;
+<!-- Problem -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">😤 المشكلة</h2>
+    <p class="section-desc">85% من المواهب الرياضية في السعودية لا تُكتشف</p>
+    <div class="grid-4">
+      <div class="problem-card">
+        <span class="problem-icon">🎲</span>
+        <h3>اكتشاف عشوائي</h3>
+        <p>يعتمد على الحظ والواسطة — مو على بيانات</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon">📋</span>
+        <h3>تقييم شخصي</h3>
+        <p>كل مدرب يقيّم بطريقته — لا معايير موحدة</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon">📍</span>
+        <h3>تغطية محدودة</h3>
+        <p>الكشافون بالمدن الكبرى فقط — الباقي مهمل</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon">💸</span>
+        <h3>استثمار ضائع</h3>
+        <p>ملايين على أجانب والمواهب المحلية مجهولة</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            updatePlayerSelects();
-            renderTeam();
-        });
+<!-- Solution -->
+<section class="section section-dark">
+  <div class="container">
+    <h2 class="section-title">✅ الحل — نظام هجين فريد</h2>
+    <p class="section-desc">AI يحلل + الكشاف يقيّم + النظام يدمج = تقرير موثوق</p>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-icon">📸</div>
+        <h4>ارفع صورة</h4>
+        <p>صورة أثناء اللعب أو التمرين</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-icon">🧠</div>
+        <h4>AI يحلل</h4>
+        <p>Anthropic Vision API حقيقي</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-icon">📋</div>
+        <h4>الكشاف يقيّم</h4>
+        <p>تقييم مهني مهيكل</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-icon">📊</div>
+        <h4>تقرير احترافي</h4>
+        <p>Radar + Sport DNA + توصيات</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-        function showPage(page) {
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById('home').classList.add('hidden');
-            document.getElementById('analyze').classList.add('hidden');
-            document.getElementById('compare').classList.add('hidden');
-            document.getElementById('history').classList.add('hidden');
-            document.getElementById('team').classList.add('hidden');
-            document.getElementById(page).classList.remove('hidden');
-        }
+<!-- Features -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">🔥 وش يميّز SCOUT AI</h2>
+    <div class="grid-3">
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(0,230,118,0.1)">⚖️</div>
+        <h3>Scoring Engine حقيقي</h3>
+        <p>أوزان مختلفة لكل مركز — المهاجم التسديد 28% والمدافع الدفاع 28%. مو أرقام عشوائية.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(255,215,64,0.1)">🧬</div>
+        <h3>Sport DNA</h3>
+        <p>يكتشف مركزك الحقيقي: "أنت مسجّل مهاجم لكن بياناتك تقول جناح أنسب!"</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(0,188,212,0.1)">🔄</div>
+        <h3>دمج ذكي</h3>
+        <p>AI بوزن 40% + كشاف بوزن 60% = نتيجة أدق من أي طريقة لحالها.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(255,82,82,0.1)">📊</div>
+        <h3>معايير FIFA</h3>
+        <p>مقارنة مع المتوسط الدولي لكل فئة عمرية: U-14, U-17, U-19, U-21, Senior.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(179,136,255,0.1)">⭐</div>
+        <h3>لاعب مشابه</h3>
+        <p>الـ AI يقولك أسلوبك يشبه أي لاعب محترف — مع السبب.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(255,171,64,0.1)">💪</div>
+        <h3>توصيات تدريبية</h3>
+        <p>3 نصائح تدريبية مخصصة من AI بناءً على نقاط ضعفك.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-        function setAnalyzeMode(mode) {
-            currentAnalyzeMode = mode;
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-        }
+<!-- For Who -->
+<section class="section section-dark">
+  <div class="container">
+    <h2 class="section-title">👥 لمين SCOUT AI؟</h2>
+    <div class="grid-3">
+      <div class="who-card">
+        <span class="who-emoji">⚽</span>
+        <h3>اللاعب</h3>
+        <p>ارفع صورتك واكتشف مستواك الحقيقي + المركز الأنسب لك</p>
+        <a href="pages/demo.html" class="btn btn-sm">جرّب الحين</a>
+      </div>
+      <div class="who-card">
+        <span class="who-emoji">🏟️</span>
+        <h3>الأكاديمية</h3>
+        <p>تقارير شهرية لكل لاعب تعرضها للأهل + لاعبينك يبانون للكشافين</p>
+        <a href="pages/academy.html" class="btn btn-sm btn-gold">اعرف أكثر</a>
+      </div>
+      <div class="who-card">
+        <span class="who-emoji">🔍</span>
+        <h3>الكشاف</h3>
+        <p>تصفّح مواهب من كل السعودية + قيّم بفورم مهني + تواصل مباشر</p>
+        <a href="pages/demo.html" class="btn btn-sm btn-cyan">لوحة الكشاف</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-        function handleFile(file) {
-            if (!file) return;
-            currentFile = file;
-            const preview = document.getElementById('videoPreview');
-            const video = document.getElementById('previewVideo');
-            
-            if (file.type.startsWith('video/')) {
-                preview.classList.remove('hidden');
-                video.src = URL.createObjectURL(file);
-            } else if (file.type.startsWith('image/')) {
-                alert('Image uploaded! Ready for analysis.');
-            }
-        }
+<!-- CTA -->
+<section class="section cta-section">
+  <div class="container" style="text-align:center">
+    <div class="logo-icon" style="margin-bottom:20px">⚡</div>
+    <h2 style="font-size:clamp(28px,5vw,42px); margin-bottom:8px">جاهز تكتشف موهبتك؟</h2>
+    <p style="color:var(--dim); font-size:16px; margin-bottom:32px">التحليل يشتغل حقيقي — جربه بنفسك</p>
+    <a href="pages/demo.html" class="btn btn-primary btn-lg">📸 ابدأ التحليل المجاني</a>
+  </div>
+</section>
 
-        function startAnalysis() {
-            const name = document.getElementById('playerName').value;
-            const age = document.getElementById('playerAge').value;
-            const position = document.getElementById('playerPosition').value;
-            
-            if (!name || !age || !position) {
-                alert('املأ كل الحقول!');
-                return;
-            }
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">⚡ SCOUT <span>AI</span></div>
+        <p>اكتشف المواهب — بالذكاء الاصطناعي</p>
+      </div>
+      <div class="footer-links">
+        <a href="pages/demo.html">الديمو</a>
+        <a href="pages/academy.html">للأكاديميات</a>
+        <a href="pages/about.html">عن المشروع</a>
+      </div>
+      <div>
+        <p>هاكاثون الابتكار الرياضي 2026</p>
+        <p>الرياض | أبريل 20-22</p>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 SCOUT AI — جميع الحقوق محفوظة</div>
+  </div>
+</footer>
 
-            // Simulate analysis
-            const scores = generateRandomScores();
-            const player = { id: Date.now(), name, age: parseInt(age), position, scores, date: new Date().toISOString() };
-            
-            // Save
-            players.push(player);
-            analysisHistory.push({ playerId: player.id, ...player });
-            localStorage.setItem('scoutPlayers', JSON.stringify(players));
-            localStorage.setItem('scoutHistory', JSON.stringify(analysisHistory));
-
-            // Display results
-            displayResults(player);
-        }
-
-        function generateRandomScores() {
-            return {
-                overall: Math.floor(60 + Math.random() * 35),
-                speed: Math.floor(60 + Math.random() * 35),
-                shooting: Math.floor(60 + Math.random() * 35),
-                passing: Math.floor(60 + Math.random() * 35),
-                dribbling: Math.floor(60 + Math.random() * 35),
-                defending: Math.floor(60 + Math.random() * 35),
-                stamina: Math.floor(60 + Math.random() * 35),
-                vision: Math.floor(60 + Math.random() * 35)
-            };
-        }
-
-        function displayResults(player) {
-            document.getElementById('analysisResult').classList.remove('hidden');
-            document.getElementById('overallScore').textContent = player.scores.overall;
-            document.getElementById('speedScore').textContent = player.scores.speed;
-            document.getElementById('skillScore').textContent = (player.scores.dribbling + player.scores.shooting) / 2;
-            document.getElementById('staminaScore').textContent = player.scores.stamina;
-
-            // Radar chart
-            new Chart(document.getElementById('radarChart'), {
-                type: 'radar',
-                data: {
-                    labels: ['السرعة', 'التسديد', 'التمرير', 'المراوغة', 'الدفاع', 'اللياقة', 'الرؤية'],
-                    datasets: [{
-                        data: [player.scores.speed, player.scores.shooting, player.scores.passing, player.scores.dribbling, player.scores.defending, player.scores.stamina, player.scores.vision],
-                        backgroundColor: 'rgba(0,230,118,0.2)',
-                        borderColor: '#00e676',
-                        borderWidth: 2
-                    }]
-                },
-                options: { scales: { r: { min: 50, max: 100 } } }
-            });
-
-            // Best position
-            const positions = { 'مهاجم': player.scores.shooting, 'جناح': player.scores.dribbling, 'وسط': player.scores.passing, 'مدافع': player.scores.defending, 'حارس': player.scores.stamina };
-            const best = Object.entries(positions).reduce((a, b) => a[1] > b[1] ? a : b);
-            document.getElementById('bestPosition').textContent = best[0];
-
-            // Recommendations
-            const recs = generateRecommendations(player.scores);
-            document.getElementById('recommendations').innerHTML = recs.map(r => `<p style="margin:5px 0">• ${r}</p>`).join('');
-
-            updatePlayerSelects();
-            renderTeam();
-        }
-
-        function generateRecommendations(scores) {
-            const recs = [];
-            if (scores.speed < 70) recs.push('تحسين السرعة: تمارين HIIT وجري');
-            if (scores.shooting < 70) recs.push('تحسين التسديد: تمريناتPrecision');
-            if (scores.stamina < 70) recs.push('تحسين اللياقة: cardio منتظم');
-            if (recs.length === 0) recs.push('مستوى excellent! استمر');
-            return recs;
-        }
-
-        function updatePlayerSelects() {
-            const opts = '<option value="">اختر لاعب</option>' + players.map(p => `<option value="${p.id}">${p.name} - ${p.position}</option>`).join('');
-            document.getElementById('comparePlayer1').innerHTML = opts;
-            document.getElementById('comparePlayer2').innerHTML = opts;
-            document.getElementById('historyPlayer').innerHTML = opts;
-        }
-
-        function comparePlayers() {
-            const p1Id = document.getElementById('comparePlayer1').value;
-            const p2Id = document.getElementById('comparePlayer2').value;
-            if (!p1Id || !p2Id) return;
-
-            const p1 = players.find(p => p.id == p1Id);
-            const p2 = players.find(p => p.id == p2Id);
-
-            document.getElementById('player1Stats').innerHTML = `<p>التقييم: <strong>${p1.scores.overall}</strong></p><p>المركز: ${p1.position}</p>`;
-            document.getElementById('player2Stats').innerHTML = `<p>التقييم: <strong>${p2.scores.overall}</strong></p><p>المركز: ${p2.position}</p>`;
-
-            // Compare chart
-            if (window.compareChart) window.compareChart.destroy();
-            window.compareChart = new Chart(document.getElementById('compareChart'), {
-                type: 'bar',
-                data: {
-                    labels: ['السرعة', 'التسديد', 'التمرير', 'المراوغة'],
-                    datasets: [
-                        { label: p1.name, data: [p1.scores.speed, p1.scores.shooting, p1.scores.passing, p1.scores.dribbling], backgroundColor: '#00e676' },
-                        { label: p2.name, data: [p2.scores.speed, p2.scores.shooting, p2.scores.passing, p2.scores.dribbling], backgroundColor: '#00bcd4' }
-                    ]
-                }
-            });
-        }
-
-        function loadHistory() {
-            const playerId = document.getElementById('historyPlayer').value;
-            if (!playerId) return;
-
-            const history = analysisHistory.filter(h => h.playerId == playerId);
-            const timeline = document.getElementById('historyTimeline');
-            
-            timeline.innerHTML = history.map(h => `
-                <div class="card timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div>
-                        <p><strong>${new Date(h.date).toLocaleDateString('ar')}</strong></p>
-                        <p>التقييم: ${h.scores.overall}</p>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderTeam() {
-            document.getElementById('teamPlayers').innerHTML = players.map(p => `
-                <div class="card" style="text-align:center">
-                    <div class="player-avatar">${p.name.charAt(0)}</div>
-                    <h4>${p.name}</h4>
-                    <p style="color:var(--text-dim)">${p.age} سنة | ${p.position}</p>
-                    <span class="badge badge-gold">${p.scores.overall}</span>
-                </div>
-            `).join('') || '<p style="color:var(--text-dim)">لا يوجد لاعبون</p>';
-        }
-
-        function showModal(type) {
-            const modal = document.getElementById('modal');
-            modal.classList.remove('hidden');
-            
-            if (type === 'addPlayer') {
-                document.getElementById('modalTitle').textContent = '➕ إضافة لاعب';
-                document.getElementById('modalBody').innerHTML = `
-                    <input type="text" id="newName" placeholder="الاسم">
-                    <input type="number" id="newAge" placeholder="العمر">
-                    <select id="newPosition">
-                        <option value="مهاجم">مهاجم</option>
-                        <option value="جناح">جناح</option>
-                        <option value="وسط">وسط</option>
-                        <option value="مدافع">مدافع</option>
-                    </select>
-                    <button class="btn btn-primary" style="width:100%" onclick="addPlayer()">حفظ</button>
-                `;
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('modal').classList.add('hidden');
-        }
-
-        function addPlayer() {
-            const name = document.getElementById('newName').value;
-            const age = parseInt(document.getElementById('newAge').value);
-            const position = document.getElementById('newPosition').value;
-            
-            if (!name || !age) return;
-            
-            const player = { id: Date.now(), name, age, position, scores: generateRandomScores(), date: new Date().toISOString() };
-            players.push(player);
-            localStorage.setItem('scoutPlayers', JSON.stringify(players));
-            
-            updatePlayerSelects();
-            renderTeam();
-            closeModal();
-        }
-    </script>
 </body>
 </html>
